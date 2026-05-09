@@ -1,0 +1,624 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Fill this details and get your family tree</title>
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="container navbar">
+
+        <div class="logo">
+
+            Ancestor<span>Tree</span>
+
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="/">Home</a>
+
+            <a href="/form/">Form</a>
+
+            <a href="/about/">About</a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+<section class="form-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <h1>
+
+                Fill this details and get your family tree
+
+            </h1>
+
+            <p>
+
+                Enter all family details carefully.
+
+            </p>
+
+        </div>
+
+        {% if success %}
+
+        <div class="success-message">
+
+            Family details submitted successfully 🎉
+
+        </div>
+
+        {% endif %}
+
+        <form method="POST"  id="familyForm"
+              enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <!-- ================= PERSONAL ================= -->
+
+            <div class="form-card">
+
+                <div class="form-title">
+
+                    Personal Details
+
+                </div>
+
+                <div class="form-grid">
+
+                    <!-- FULL NAME -->
+
+                    <div class="full-name-group">
+
+                        
+                        <div class="name-fields">
+
+                            <input type="text"
+                                name="first_name"
+                                placeholder="First Name"
+                                required>
+
+                            <input type="text"
+                                name="middle_name"
+                                placeholder="Middle Name">
+
+                            <input type="text"
+                                name="last_name"
+                                placeholder="Last Name"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <input type="text"
+                           name="religion"
+                           placeholder="Religion">
+
+                    <input type="text"
+                           name="nationality"
+                           placeholder="Nationality">
+
+                    <input type="text"
+                           name="goatra"
+                           placeholder="Goatra">
+
+                    <select name="gender">
+
+                        <option>Select Gender</option>
+
+                        <option>Male</option>
+
+                        <option>Female</option>
+
+                    </select>
+
+                <select name="relationship_title">
+
+                        <option value="">
+                            Select Relationship
+                        </option>
+
+                        <option value="Great Grandmother">
+                            Great Grandmother
+                        </option>
+
+                        <option value="Great Grandfather">
+                            Great Grandfather
+                        </option>
+
+                        <option value="Paternal Grandmother">
+                            Paternal Grandmother
+                        </option>
+
+                        <option value="Paternal Grandfather">
+                            Paternal Grandfather
+                        </option>
+
+                        <option value="Father">
+                            Father
+                        </option>
+
+                        <option value="Mother">
+                            Mother
+                        </option>
+
+                        <option value="Son">
+                            Son
+                        </option>
+
+                        <option value="Daughter">
+                            Daughter
+                        </option>
+
+                        <option value="Brother">
+                            Brother
+                        </option>
+
+                        <option value="Sister">
+                            Sister
+                        </option>
+
+                        <option value="Granddaughter">
+                            Granddaughter
+                        </option>
+
+                        <option value="Grandson">
+                            Grandson
+                        </option>
+
+                        <option value="Maternal Uncle">
+                            Maternal Uncle
+                        </option>
+
+                        <option value="Maternal Aunt">
+                            Maternal Aunt
+                        </option>
+
+                        <option value="Uncle">
+                            Uncle
+                        </option>
+
+                        <option value="Aunt">
+                            Aunt
+                        </option>
+
+                        <option value="Paternal Aunt">
+                            Paternal Aunt
+                        </option>
+
+                        <option value="Paternal Aunt Husband">
+                            Paternal Aunt Husband
+                        </option>
+
+                        <option value="Nephew">
+                            Nephew
+                        </option>
+
+                        <option value="Niece">
+                            Niece
+                        </option>
+
+                        <option value="Brother In Law">
+                            Brother In Law
+                        </option>
+
+                        <option value="Sister In Law">
+                            Sister In Law
+                        </option>
+
+                        <option value="Elder Uncle">
+                            Elder Uncle
+                        </option>
+
+                        <option value="Elder Aunt">
+                            Elder Aunt
+                        </option>
+
+                        <option value="Uncle">
+                            Uncle
+                        </option>
+
+                        <option value="Aunt">
+                            Aunt
+                        </option>
+
+                        <option value="Mother In Law">
+                            Mother In Law
+                        </option>
+
+                        <option value="Father In Law">
+                            Father In Law
+                        </option>
+
+                        <option value="Husband">
+                            Husband
+                        </option>
+
+                        <option value="Wife">
+                            Wife
+                        </option>
+
+                        <option value="Sister In Law">
+                            Sister In Law
+                        </option>
+
+                        <option value="Maternal Grandmother">
+                            Maternal Grandmother
+                        </option>
+
+                        <option value="Maternal Grandfather">
+                            Maternal Grandfather
+                        </option>
+
+                    </select>
+                    <input type="number"
+                           name="height"
+                           placeholder="Height">
+
+                    <input type="number"
+                           name="weight"
+                           placeholder="Weight">
+
+                    <input type="file"
+                           name="photo">
+
+                </div>
+
+            </div>
+
+            <!-- ================= CONTACT ================= -->
+
+            <div class="form-card">
+
+                <div class="form-title">
+
+                    Contact Details
+
+                </div>
+
+                <div class="form-grid">
+
+                   <div class="phone-group">
+
+                        <select id="contact_country_code"
+                                name="country_code"
+                                class="country-select">
+
+                            <option value="+91">
+                                🇮🇳 +91
+                            </option>
+
+                            <option value="+1">
+                                🇺🇸 +1
+                            </option>
+
+                            <option value="+44">
+                                🇬🇧 +44
+                            </option>
+
+                            <option value="+61">
+                                🇦🇺 +61
+                            </option>
+
+                            <option value="+971">
+                                🇦🇪 +971
+                            </option>
+
+                        </select>
+
+                        <input type="tel"
+                            id="contact_number_1"
+                            name="contact_number_1"
+                            placeholder="Enter Mobile Number"
+                            maxlength="10"
+                            required>
+
+                    </div>
+
+                    <div class="whatsapp-section">
+
+                        <!-- CHECKBOX -->
+
+                        <div class="same-checkbox">
+
+                            <input type="checkbox"
+                                id="sameAsContact">
+
+                            <label for="sameAsContact">
+
+                                Same as above
+
+                            </label>
+
+                        </div>
+
+                        <!-- WHATSAPP INPUT -->
+
+                        <div class="phone-group">
+
+                            <input type="tel"
+                                id="whatsapp_number"
+                                name="whatsapp_number"
+                                placeholder="WhatsApp Number"
+                                maxlength="10">
+
+                        </div>
+
+                    </div>
+                    <div class="phone-group">
+
+                        <select name="country_code"
+                                class="country-select">
+
+                            <option value="+91">
+                                🇮🇳 +91
+                            </option>
+
+                            <option value="+1">
+                                🇺🇸 +1
+                            </option>
+
+                            <option value="+44">
+                                🇬🇧 +44
+                            </option>
+
+                            <option value="+61">
+                                🇦🇺 +61
+                            </option>
+
+                            <option value="+971">
+                                🇦🇪 +971
+                            </option>
+
+                            <option value="+81">
+                                🇯🇵 +81
+                            </option>
+
+                            <option value="+49">
+                                🇩🇪 +49
+                            </option>
+
+                            <option value="+33">
+                                🇫🇷 +33
+                            </option>
+
+                            <option value="+86">
+                                🇨🇳 +86
+                            </option>
+
+                            <option value="+7">
+                                🇷🇺 +7
+                            </option>
+
+                        </select>
+                        <input type="tel"
+                            name="contact_number_2"
+                            placeholder="Enter secondary number"
+                            maxlength="10">
+                    </div>
+                    <input type="email"
+                           name="email"
+                           placeholder="Email Address">
+
+                    <textarea name="address"
+                              placeholder="Permanent Address"></textarea>
+
+                    <textarea name="current_address"
+                              placeholder="Current Address"></textarea>
+
+                </div>
+
+            </div>
+
+            <!-- ================= LOCATION ================= -->
+
+            <div class="form-card">
+
+                <div class="form-title">
+
+                    Location Details
+
+                </div>
+
+                <div class="form-grid">
+
+                    <input type="text"
+                           name="native"
+                           placeholder="Native">
+
+                    <input type="text"
+                           name="village"
+                           placeholder="Village">
+
+                    <input type="text"
+                           name="city"
+                           placeholder="City">
+
+                    <input type="text"
+                           name="taluka"
+                           placeholder="Taluka">
+
+                    <input type="text"
+                           name="district"
+                           placeholder="District">
+
+                    <input type="text"
+                           name="pincode"
+                           placeholder="Pincode">
+
+                </div>
+
+            </div>
+
+            <!-- ================= JOB ================= -->
+
+            <div class="form-card">
+
+                <div class="form-title">
+
+                    Job Details
+
+                </div>
+
+                <div class="form-grid">
+
+                    <input type="text"
+                           name="occupation"
+                           placeholder="Occupation">
+
+                    <select name="job_type">
+
+                        <option>Job Type</option>
+
+                        <option>Private</option>
+
+                        <option>Government</option>
+
+                    </select>
+
+                    <input type="text"
+                           name="division"
+                           placeholder="Division">
+
+                    <input type="number"
+                           name="monthly_income" 
+                           placeholder="Monthly Income">
+
+                    <input type="number"
+                           name="property_value"
+                           placeholder="Property Value">
+
+                </div>
+
+            </div>
+
+            <!-- ================= BANK ================= -->
+
+   <!-- ================= BANK DETAILS ================= -->
+
+<div class="form-card">
+
+    <div class="form-title">
+
+        Bank Details
+
+    </div>
+
+    <div class="form-grid">
+
+        <input type="text"
+               name="bank_name"
+               placeholder="Bank Name">
+
+        <input type="text"
+               name="account_holder_name"
+               placeholder="Account Holder Name">
+
+        <input type="text"
+               name="account_number"
+               placeholder="Account Number">
+
+        <input type="text"
+               name="ifsc_code"
+               placeholder="IFSC Code">
+
+        <input type="text"
+               name="branch_name"
+               placeholder="Branch Name">
+
+    </div>
+
+</div>
+
+<!-- ================= UPI DETAILS ================= -->
+
+<div class="form-card">
+
+    <div class="form-title">
+
+        UPI Details
+
+    </div>
+
+    <div class="form-grid">
+
+        <input type="text"
+               name="upi_id"
+               placeholder="UPI ID">
+
+        <input type="text"
+               name="upi_name"
+               placeholder="UPI Account Name">
+
+    </div>
+
+</div>
+
+<!-- ================= IDENTITY DETAILS ================= -->
+
+<div class="form-card">
+
+    <div class="form-title">
+
+        Identity Details
+
+    </div>
+
+    <div class="form-grid">
+
+        <input type="text"
+               name="aadhar_card_number"
+               placeholder="Aadhar Card Number"
+               maxlength="12">
+
+        <input type="text"
+               name="pan_card_number"
+               placeholder="PAN Card Number"
+               maxlength="10">
+
+    </div>
+
+</div>            <div class="submit-area">
+
+                <button type="submit"
+                        class="submit-btn">
+
+                    Submit Details
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+
+</html>
