@@ -55,7 +55,7 @@ ROOT_URLCONF = 'ancestor_tree.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/ 'myproject/templates'],
+        'DIRS': [BASE_DIR/ 'myproject/templates/static'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,3 +116,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'myproject/Templates/static',
+]

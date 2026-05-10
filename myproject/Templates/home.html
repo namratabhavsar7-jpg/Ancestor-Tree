@@ -1,43 +1,23 @@
-{% load static %}
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ancestor Tree</title>
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-</head>
-<body>
-
-    <nav>
-
-        <div class="logo">
-            Ancestor Tree
+{% block content %}
+<section class="hero">
+    <div class="container hero-content">
+        <div class="hero-left">
+            <span class="tag">Digital Heritage Platform</span>
+            <h1>Preserve Your Family Legacy For Future Generations</h1>
+            <p>Create a secure digital family heritage system and preserve generations forever.</p>
+            <a href="/form/" class="primary-btn">Open Registration Form</a>
         </div>
 
-        <div class="menu">
-            <a href="#">Home</a>
-            <a href="#">Family Tree</a>
-            <a href="#">Search</a>
-            <a href="#">About</a>
+        <div class="hero-right">
+            <div class="hero-card">
+                <div class="member">Great Grand Parents</div>
+                <div class="member">Grand Parents</div>
+                <div class="member active">Parents</div>
+                <div class="member">Children</div>
+            </div>
         </div>
-
-    </nav>
-
-    <section class="hero">
-
-        <h1>Welcome To Ancestor Tree</h1>
-
-        <p>
-            Preserve your family history digitally and explore generations.
-        </p>
-
-    </section>
-
-    <script src="{% static 'js/script.js' %}"></script>
-
-</body>
-</html>
+    </div>
+</section>
+{% endblock %}

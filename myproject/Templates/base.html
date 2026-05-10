@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ancestor Tree</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Ancestor <span>Tree</span></h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'personal_info' %}" class="nav-item">
+                    <span class="icon">👤</span> Personal Information
+                </a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <header class="header">
+                <div class="container navbar">
+                    <div class="logo">Ancestor<span>Tree</span></div>
+                    <nav class="nav-links">
+                        <a href="/">Home</a>
+                        <a href="/form/">Form</a>
+                        <a href="/about/">About</a>
+                    </nav>
+                </div>
+            </header>
+
+            {% block content %}
+            {% endblock %}
+            </main> 
+    </div> 
+</body>
+</html>
