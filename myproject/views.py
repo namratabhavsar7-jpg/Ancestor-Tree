@@ -18,7 +18,81 @@ def about(request):
 
 #===================personal info =============
 def personal_info(request):
-    return render(request, 'personal_info.html')
+    success = request.GET.get('success')
+
+    if request.method == 'POST':
+        FamilyMember.objects.create(
+            first_name=request.POST.get('first_name'),
+            middle_name=request.POST.get('middle_name'),
+            last_name=request.POST.get('last_name'),
+            religion=request.POST.get('religion'),
+            nationality=request.POST.get('nationality'),
+            goatra=request.POST.get('goatra'),
+            relationship_title=request.POST.get('relationship_title'),
+            gender=request.POST.get('gender'),
+            height=request.POST.get('height') or None,
+            weight=request.POST.get('weight') or None,
+            photo=request.FILES.get('photo'),
+        )
+        return redirect('/personal_info/?success=true')
+
+    return render(request, 'personal_info.html', {'success': success})
+
+#===================contact info =============
+def contact_info(request):
+    success = request.GET.get('success')
+    if request.method == 'POST':
+        FamilyMember.objects.create(
+            contact_number_1=request.POST.get('contact_number_1'),
+            contact_number_2=request.POST.get('contact_number_2'),
+            whatsapp_number=request.POST.get('whatsapp_number'),
+            email=request.POST.get('email'),
+            address=request.POST.get('address'),
+            current_address=request.POST.get('current_address'),
+        )
+        return redirect('/contact-info/?success=true')
+    return render(request, 'contact_info.html', {'success': success})
+
+#===================address details =============
+def address_details(request):
+    success = request.GET.get('success')
+    if request.method == 'POST':
+        FamilyMember.objects.create(
+            native=request.POST.get('native'),
+            village=request.POST.get('village'),
+            city=request.POST.get('city'),
+            taluka=request.POST.get('taluka'),
+            district=request.POST.get('district'),
+            pincode=request.POST.get('pincode'),
+        )
+        return redirect('/address-details/?success=true')
+    return render(request, 'address_info.html', {'success': success})
+
+#===================bank details =============
+def bank_details(request):
+    success = request.GET.get('success')
+    if request.method == 'POST':
+        FamilyMember.objects.create(
+            bank_name=request.POST.get('bank_name'),
+            account_holder_name=request.POST.get('account_holder_name'),
+            account_number=request.POST.get('account_number'),
+            ifsc_code=request.POST.get('ifsc_code'),
+            branch_name=request.POST.get('branch_name'),
+        )
+        return redirect('/bank-details/?success=true')
+    return render(request, 'bank_details.html', {'success': success})
+
+#===================upi details =============
+def upi_details(request):
+    success = request.GET.get('success')
+    if request.method == 'POST':
+        FamilyMember.objects.create(
+            upi_id=request.POST.get('upi_id'),
+            upi_name=request.POST.get('upi_name'),
+        )
+        return redirect('/upi-details/?success=true')
+    return render(request, 'upi_details.html', {'success': success})
+
 # ================= FORM PAGE =================
 
 def form_page(request):

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Address Details</h1>
+            <p>Please provide your location and address information.</p>
+        </div>
+
+        {% if success %}
+        <div class="success-message">
+            Address details submitted successfully 🎉
+        </div>
+        {% endif %}
+
+        <form method="POST" id="addressDetailsForm">
+            {% csrf_token %}
+
+            <div class="form-card">
+                <div class="form-title">Location Details</div>
+                <div class="form-grid">
+                    <input type="text" name="native" placeholder="Native Place">
+                    <input type="text" name="village" placeholder="Village">
+                    <input type="text" name="city" placeholder="City">
+                    <input type="text" name="taluka" placeholder="Taluka">
+                    <input type="text" name="district" placeholder="District">
+                    <input type="text" name="pincode" placeholder="Pincode" maxlength="6">
+                </div>
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn">Submit Address Details</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -1,8 +1,56 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<section class="container" style="padding: 50px 0;">
-    <h1>Personal Information</h1>
-    <p>Apni jankari yahan bharein...</p>
-    </section>
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Personal Information</h1>
+            <p>Please provide your personal details below.</p>
+        </div>
+
+        {% if success %}
+        <div class="success-message">
+            Personal details submitted successfully 🎉
+        </div>
+        {% endif %}
+
+        <form method="POST" id="personalInfoForm" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-card">
+                <div class="form-title">Personal Details</div>
+                <div class="form-grid">
+                    <div class="full-name-group">
+                        <div class="name-fields">
+                            <input type="text" name="first_name" placeholder="First Name" required>
+                            <input type="text" name="middle_name" placeholder="Middle Name">
+                            <input type="text" name="last_name" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                    <input type="text" name="religion" placeholder="Religion">
+                    <input type="text" name="nationality" placeholder="Nationality">
+                    <input type="text" name="goatra" placeholder="Goatra">
+                    <select name="gender">
+                        <option>Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                    <select name="relationship_title">
+                        <option value="">Select Relationship</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                    </select>
+                    <input type="number" name="height" placeholder="Height">
+                    <input type="number" name="weight" placeholder="Weight">
+                    <input type="file" name="photo">
+                </div>
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn">Submit Personal Details</button>
+            </div>
+        </form>
+    </div>
+</section>
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>UPI Details</h1>
+            <p>Please provide your UPI information.</p>
+        </div>
+
+        {% if success %}
+        <div class="success-message">
+            UPI details submitted successfully 🎉
+        </div>
+        {% endif %}
+
+        <form method="POST" id="upiDetailsForm">
+            {% csrf_token %}
+
+            <div class="form-card">
+                <div class="form-title">UPI Details</div>
+                <div class="form-grid">
+                    <input type="text" name="upi_id" placeholder="UPI ID (e.g. user@bank)">
+                    <input type="text" name="upi_name" placeholder="UPI Display Name">
+                </div>
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn">Submit UPI Details</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

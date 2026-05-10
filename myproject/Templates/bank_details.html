@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Bank Details</h1>
+            <p>Please provide your bank account information.</p>
+        </div>
+
+        {% if success %}
+        <div class="success-message">
+            Bank details submitted successfully 🎉
+        </div>
+        {% endif %}
+
+        <form method="POST" id="bankDetailsForm">
+            {% csrf_token %}
+
+            <div class="form-card">
+                <div class="form-title">Bank Details</div>
+                <div class="form-grid">
+                    <input type="text" name="bank_name" placeholder="Bank Name">
+                    <input type="text" name="account_holder_name" placeholder="Account Holder Name">
+                    <input type="text" name="account_number" placeholder="Account Number">
+                    <input type="text" name="ifsc_code" placeholder="IFSC Code">
+                    <input type="text" name="branch_name" placeholder="Branch Name">
+                </div>
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn">Submit Bank Details</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
