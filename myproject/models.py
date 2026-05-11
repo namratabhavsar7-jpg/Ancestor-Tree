@@ -62,23 +62,27 @@ class FamilyMember(models.Model):
         null=True
     )
 
-    address = models.TextField()
+    address = models.TextField(blank=True, null=True)
 
-    current_address = models.TextField()
+    current_address = models.TextField(blank=True, null=True)
 
     # ================= LOCATION DETAILS =================
 
-    native = models.CharField(max_length=100)
+    state = models.CharField(max_length=100, blank=True, null=True)
 
-    village = models.CharField(max_length=100)
+    district = models.CharField(max_length=100)
 
     city = models.CharField(max_length=100)
 
     taluka = models.CharField(max_length=100)
 
-    district = models.CharField(max_length=100)
+    village = models.CharField(max_length=100)
+
+    area = models.CharField(max_length=150, blank=True, null=True)
 
     pincode = models.CharField(max_length=10)
+
+    native = models.CharField(max_length=100)
 
     # ================= JOB DETAILS =================
 
@@ -158,6 +162,20 @@ class FamilyMember(models.Model):
 
     pan_card_number = models.CharField(max_length=10)
 
+    # ================= NIVED DETAILS =================
+
+    kuldevi_name = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True
+    )
+
+    favorite_food = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True
+    )
+
     # ================= SYSTEM =================
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -169,3 +187,19 @@ class FamilyMember(models.Model):
     def __str__(self):
 
         return f"{self.first_name} {self.last_name}"
+
+class KuldevDetail(models.Model):
+    member = models.ForeignKey(FamilyMember, on_delete=models.CASCADE, related_name='kuldev_details', null=True, blank=True)
+    dev_type = models.CharField(max_length=100)
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.dev_type}: {self.name}"
+
+class NivedFood(models.Model):
+    member = models.ForeignKey(FamilyMember, on_delete=models.CASCADE, related_name='nived_foods', null=True, blank=True)
+    category = models.CharField(max_length=100, blank=True, null=True)
+    food_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.category}: {self.food_name}" if self.category else self.food_name

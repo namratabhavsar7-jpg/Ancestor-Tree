@@ -30,17 +30,67 @@
                     </div>
                     <input type="text" name="religion" placeholder="Religion">
                     <input type="text" name="nationality" placeholder="Nationality">
-                    <input type="text" name="goatra" placeholder="Goatra">
-                    <select name="gender">
-                        <option>Select Gender</option>
-                        <option>Male</option>
-                        <option>Female</option>
+                    <select name="gender" id="genderSelect" onchange="toggleOtherGender()">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
                     </select>
+                    <input type="text" name="other_gender" id="other_gender_input" style="display:none;" placeholder="Please specify gender">
+
                     <select name="relationship_title">
                         <option value="">Select Relationship</option>
-                        <option value="Father">Father</option>
-                        <option value="Mother">Mother</option>
+                        <option value="PARDADI">PARDADI</option>
+                        <option value="PARDADA">PARDADA</option>
+                        <option value="GRAND MOTHER Paternal">GRAND MOTHER Paternal</option>
+                        <option value="GRAND FATHER Paternal">GRAND FATHER Paternal</option>
+                        <option value="FATHER">FATHER</option>
+                        <option value="MOTHER">MOTHER</option>
+                        <option value="DAUGHTER">DAUGHTER</option>
+                        <option value="SON">SON</option>
+                        <option value="BROTHER">BROTHER</option>
+                        <option value="SISTER">SISTER</option>
+                        <option value="GRAND DAUGHTER">GRAND DAUGHTER</option>
+                        <option value="GRAND SON">GRAND SON</option>
+                        <option value="MAMA">MAMA</option>
+                        <option value="MAMI">MAMI</option>
+                        <option value="MASA">MASA</option>
+                        <option value="MASI">MASI</option>
+                        <option value="FAI">FAI</option>
+                        <option value="FUVA">FUVA</option>
+                        <option value="BHATRIJO">BHATRIJO</option>
+                        <option value="BHATRIJI">BHATRIJI</option>
+                        <option value="BHANO">BHANO</option>
+                        <option value="BHANI">BHANI</option>
+                        <option value="SALO">SALO</option>
+                        <option value="SALI">SALI</option>
+                        <option value="MOTAPAPA">MOTAPAPA</option>
+                        <option value="MOTAMOMMY">MOTAMOMMY</option>
+                        <option value="KAKA">KAKA</option>
+                        <option value="KAKI">KAKI</option>
+                        <option value="SASU">SASU</option>
+                        <option value="SASRA">SASRA</option>
+                        <option value="HUSBAND">HUSBAND</option>
+                        <option value="WIFE">WIFE</option>
+                        <option value="BHABHI">BHABHI</option>
+                        <option value="NNAND">NNAND</option>
+                        <option value="GRAND MOTHER Maternal">GRAND MOTHER Maternal</option>
+                        <option value="GRAND FATHER Maternal">GRAND FATHER Maternal</option>
                     </select>
+
+<script>
+    function toggleOtherGender() {
+        const genderSelect = document.getElementById('genderSelect');
+        const otherGenderInput = document.getElementById('other_gender_input');
+        if (genderSelect.value === 'Other') {
+            otherGenderInput.style.display = 'block';
+            otherGenderInput.required = true;
+        } else {
+            otherGenderInput.style.display = 'none';
+            otherGenderInput.required = false;
+        }
+    }
+</script>
                     <input type="number" name="height" placeholder="Height">
                     <input type="number" name="weight" placeholder="Weight">
                     <input type="file" name="photo">

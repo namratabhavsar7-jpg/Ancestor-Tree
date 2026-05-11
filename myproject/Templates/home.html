@@ -1,24 +1,89 @@
-
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<section class="hero">
-    <div class="container hero-content">
-        <div class="hero-left">
-            <span class="tag">Digital Heritage Platform</span>
-            <h1>Preserve Your Family Legacy For Future Generations</h1>
-            <p>Create a secure digital family heritage system and preserve generations forever.</p>
-            <a href="/form/" class="primary-btn">Open Registration Form</a>
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="container hero-wrapper">
+        <div class="hero-text">
+            <span class="badge">🌿 Roots of Generations</span>
+            <h1>Digitize Your <br><span>Family Legacy</span></h1>
+            <p>A secure platform to preserve your family's history, traditions, and roots. Pass down your heritage to the next generation with ease and security.</p>
+            <div class="hero-btns">
+                <a href="/form/" class="cta-primary">Get Started Now</a>
+                <a href="/about/" class="cta-secondary">Learn More</a>
+            </div>
         </div>
-
-        <div class="hero-right">
-            <div class="hero-card">
-                <div class="member">Great Grand Parents</div>
-                <div class="member">Grand Parents</div>
-                <div class="member active">Parents</div>
-                <div class="member">Children</div>
+        <div class="hero-visual">
+            <div class="floating-cards">
+                <div class="f-card c1"><span>👤</span><p>Personal History</p></div>
+                <div class="f-card c2"><span>🔱</span><p>Ritual & Nived</p></div>
+                <div class="f-card c3"><span>📍</span><p>Ancestral Roots</p></div>
+                <div class="f-card c4"><span>🌸</span><p>Kuldevi Details</p></div>
+            </div>
+            <div class="main-circle">
+                <div class="inner-content">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3665/3665910.png" alt="Tree Icon">
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- ================= FEATURES GRID ================= -->
+<section class="features-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Explore Modules</h2>
+            <p>Every detail matters. Capture your complete family identity through these specialized sections.</p>
+        </div>
+        
+        <div class="feature-grid">
+            <a href="{% url 'personal_info' %}" class="feature-card">
+                <div class="f-icon">👤</div>
+                <h3>Personal Info</h3>
+                <p>Identity, physical traits, and professional details.</p>
+            </a>
+            <a href="{% url 'address_details' %}" class="feature-card">
+                <div class="f-icon">📍</div>
+                <h3>Ancestral Place</h3>
+                <p>Native roots, villages, and permanent locations.</p>
+            </a>
+            <a href="{% url 'nived_details' %}" class="feature-card">
+                <div class="f-icon">🔱</div>
+                <h3>Nived & Prasad</h3>
+                <p>Preserve your family's unique religious offerings.</p>
+            </a>
+            <a href="{% url 'kuldevi_info' %}" class="feature-card">
+                <div class="f-icon">🌸</div>
+                <h3>Kuldevi / Kuldev</h3>
+                <p>Honoring the primary deities of your lineage.</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ================= LEGACY SECTION ================= -->
+<section class="legacy-section">
+    <div class="container legacy-content">
+        <div class="legacy-img">
+            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=600" alt="Legacy Image">
+        </div>
+        <div class="legacy-info">
+            <h2>Why Ancestor Tree?</h2>
+            <ul class="legacy-list">
+                <li>
+                    <strong>Secure Digital Vault:</strong> Your data is stored with modern encryption.
+                </li>
+                <li>
+                    <strong>Modular Collection:</strong> Fill details at your own pace, one section at a time.
+                </li>
+                <li>
+                    <strong>Dynamic Exports:</strong> Soon, generate and export your full family tree visual.
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

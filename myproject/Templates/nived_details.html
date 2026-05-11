@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Nived Details</h1>
+            <p>Please provide your Food / Prasad information. You can add multiple entries.</p>
+        </div>
+
+        {% if success %}
+        <div class="success-message">
+            Nived details submitted successfully 🎉
+        </div>
+        {% endif %}
+
+        <form method="POST" id="nivedDetailsForm">
+            {% csrf_token %}
+
+            <div id="food-container">
+                <!-- Initial Entry -->
+                <div class="form-card food-entry">
+                    <div class="form-title">Nived Offering</div>
+                    <div class="form-grid">
+                        <input type="text" name="food_name" placeholder="Name of Food / Prasad" required>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0; text-align: right;">
+                <button type="button" class="add-more-btn" onclick="addMoreFood()">+ Add More Food</button>
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn">Submit Nived Details</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+let foodCount = 1;
+function addMoreFood() {
+    foodCount++;
+    const container = document.getElementById('food-container');
+    const newEntry = document.createElement('div');
+    newEntry.className = 'form-card food-entry';
+    newEntry.style.marginTop = '20px';
+    newEntry.innerHTML = `
+        <div class="form-title">Nived Offering</div>
+        <div class="form-grid">
+            <input type="text" name="food_name" placeholder="Name of Food / Prasad" required>
+        </div>
+    `;
+    container.appendChild(newEntry);
+}
+</script>
+
+<style>
+.add-more-btn {
+    background-color: var(--primary-green);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.add-more-btn:hover {
+    background-color: var(--accent-brown);
+}
+.food-entry {
+    animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+{% endblock %}

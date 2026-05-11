@@ -21,6 +21,10 @@ def personal_info(request):
     success = request.GET.get('success')
 
     if request.method == 'POST':
+        gender = request.POST.get('gender')
+        if gender == 'Other':
+            gender = request.POST.get('other_gender')
+            
         FamilyMember.objects.create(
             first_name=request.POST.get('first_name'),
             middle_name=request.POST.get('middle_name'),
@@ -29,7 +33,7 @@ def personal_info(request):
             nationality=request.POST.get('nationality'),
             goatra=request.POST.get('goatra'),
             relationship_title=request.POST.get('relationship_title'),
-            gender=request.POST.get('gender'),
+            gender=gender,
             height=request.POST.get('height') or None,
             weight=request.POST.get('weight') or None,
             photo=request.FILES.get('photo'),
@@ -58,12 +62,14 @@ def address_details(request):
     success = request.GET.get('success')
     if request.method == 'POST':
         FamilyMember.objects.create(
-            native=request.POST.get('native'),
-            village=request.POST.get('village'),
+            state=request.POST.get('state'),
+            district=request.POST.get('district'),
             city=request.POST.get('city'),
             taluka=request.POST.get('taluka'),
-            district=request.POST.get('district'),
+            village=request.POST.get('village'),
+            area=request.POST.get('area'),
             pincode=request.POST.get('pincode'),
+            native=request.POST.get('native'),
         )
         return redirect('/address-details/?success=true')
     return render(request, 'address_info.html', {'success': success})
@@ -92,6 +98,50 @@ def upi_details(request):
         )
         return redirect('/upi-details/?success=true')
     return render(request, 'upi_details.html', {'success': success})
+
+#===================nived details =============
+from .models import NivedFood
+
+def nived_details(request):
+    success = request.GET.get('success')
+    if request.method == 'POST':
+        food_names = request.POST.getlist('food_name')
+        
+        for name in food_names:
+            if name:
+                NivedFood.objects.create(
+                    food_name=name
+                )
+        return redirect('/nived-details/?success=true')
+    return render(request, 'nived_details.html', {'success': success})
+
+#===================kuldevi details =============
+from .models import KuldevDetail
+
+def kuldevi_info(request):
+    success = request.GET.get('success')
+    if request.method == 'POST':
+        kuldevi_names = request.POST.getlist('kuldevi_names')
+        kuldev_names = request.POST.getlist('kuldev_names')
+        
+        # Save Kuldevi entries
+        for name in kuldevi_names:
+            if name:
+                KuldevDetail.objects.create(
+                    dev_type='Kuldevi',
+                    name=name
+                )
+        
+        # Save Kuldev entries
+        for name in kuldev_names:
+            if name:
+                KuldevDetail.objects.create(
+                    dev_type='Kuldev',
+                    name=name
+                )
+                
+        return redirect('/kuldevi-info/?success=true')
+    return render(request, 'kuldevi_info.html', {'success': success})
 
 # ================= FORM PAGE =================
 

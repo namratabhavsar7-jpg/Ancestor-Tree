@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Kuldevi & Kuldev Details</h1>
+            <p>Please provide names for Kuldevi and Kuldev. You can add multiple names for each.</p>
+        </div>
+
+        {% if success %}
+        <div class="success-message">
+            Details submitted successfully 🎉
+        </div>
+        {% endif %}
+
+        <form method="POST" id="kuldeviDetailsForm">
+            {% csrf_token %}
+
+            <!-- Combined Section in One Card with Horizontal Layout -->
+            <div class="form-card">
+                <div class="horizontal-flex-container">
+                    
+                    <!-- Kuldevi Side -->
+                    <div class="column-section">
+                        <div class="form-title" style="border-bottom: 2px solid var(--accent-brown); padding-bottom: 5px;">Kuldevi Details</div>
+                        <div id="kuldevi-container">
+                            <div class="single-input-row">
+                                <input type="text" name="kuldevi_names" placeholder="Name of Kuldevi" required>
+                            </div>
+                        </div>
+                        <div style="text-align: left; margin-top: 15px;">
+                            <button type="button" class="add-more-btn" onclick="addMore('kuldevi')">+ Add Kuldevi</button>
+                        </div>
+                    </div>
+
+                    <!-- Vertical Divider Line (Only visible on desktop) -->
+                    <div class="vertical-divider"></div>
+
+                    <!-- Kuldev Side -->
+                    <div class="column-section">
+                        <div class="form-title" style="border-bottom: 2px solid var(--accent-brown); padding-bottom: 5px;">Kuldev Details</div>
+                        <div id="kuldev-container">
+                            <div class="single-input-row">
+                                <input type="text" name="kuldev_names" placeholder="Name of Kuldev" required>
+                            </div>
+                        </div>
+                        <div style="text-align: left; margin-top: 15px;">
+                            <button type="button" class="add-more-btn" onclick="addMore('kuldev')">+ Add Kuldev</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn">Submit All Details</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+function addMore(type) {
+    const container = document.getElementById(type + '-container');
+    const newEntry = document.createElement('div');
+    newEntry.className = 'single-input-row';
+    newEntry.style.marginTop = '10px';
+    
+    const placeholder = type === 'kuldevi' ? 'Name of Kuldevi' : 'Name of Kuldev';
+    const inputName = type === 'kuldevi' ? 'kuldevi_names' : 'kuldev_names';
+    
+    newEntry.innerHTML = `
+        <input type="text" name="${inputName}" placeholder="${placeholder}" required>
+    `;
+    container.appendChild(newEntry);
+}
+</script>
+
+<style>
+.horizontal-flex-container {
+    display: flex;
+    gap: 40px;
+    justify-content: space-between;
+}
+.column-section {
+    flex: 1;
+    padding: 20px;
+    border-radius: 15px;
+    transition: all 0.4s ease;
+    border: 1px solid transparent;
+}
+.column-section:hover {
+    background-color: #f4f8f4; /* Very light green tint */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border-color: #e0eee0;
+}
+.vertical-divider {
+    width: 1px;
+    background-color: #eee;
+    margin: 0 10px;
+}
+.single-input-row input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+}
+.add-more-btn {
+    background-color: var(--primary-green);
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s;
+}
+.add-more-btn:hover {
+    background-color: var(--accent-brown);
+}
+
+/* Responsive: Stack vertically on small screens */
+@media (max-width: 768px) {
+    .horizontal-flex-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .vertical-divider {
+        display: none;
+    }
+}
+
+.form-card {
+    animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+{% endblock %}

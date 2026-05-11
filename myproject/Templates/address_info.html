@@ -21,12 +21,26 @@
             <div class="form-card">
                 <div class="form-title">Location Details</div>
                 <div class="form-grid">
+                    <select name="state" id="state" required>
+                        <option value="">-- Select State --</option>
+                    </select>
+                    
+                    <select name="district" id="district" required>
+                        <option value="">-- Select District --</option>
+                    </select>
+
+                    <select name="taluka" id="taluka" required>
+                        <option value="">-- Select Taluka --</option>
+                    </select>
+
+                    <select name="village" id="village" required>
+                        <option value="">-- Select Village / City --</option>
+                    </select>
+
+                    <input type="text" name="city" placeholder="City (Optional)">
+                    <input type="text" name="area" placeholder="Area / Street">
+                    <input type="text" name="pincode" id="pincode" placeholder="Pincode" readonly>
                     <input type="text" name="native" placeholder="Native Place">
-                    <input type="text" name="village" placeholder="Village">
-                    <input type="text" name="city" placeholder="City">
-                    <input type="text" name="taluka" placeholder="Taluka">
-                    <input type="text" name="district" placeholder="District">
-                    <input type="text" name="pincode" placeholder="Pincode" maxlength="6">
                 </div>
             </div>
 
@@ -36,4 +50,6 @@
         </form>
     </div>
 </section>
+
+<script src="{% static 'js/address_logic.js' %}"></script>
 {% endblock %}

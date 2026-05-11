@@ -9,26 +9,35 @@
 </head>
 <body>
 
-    <div class="main-wrapper">
-        <aside class="sidebar">
+    <div class="main-wrapper" id="mainWrapper">
+        <!-- Click Outside Overlay -->
+        <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h3>Ancestor <span>Tree</span></h3>
             </div>
             <nav class="sidebar-nav">
-                <a href="{% url 'personal_info' %}" class="nav-item">
+                <a href="{% url 'personal_info' %}" class="nav-item" onclick="closeSidebar()">
                     <span class="icon">👤</span> Personal Information
                 </a>
-                <a href="{% url 'contact_info' %}" class="nav-item">
+                <a href="{% url 'contact_info' %}" class="nav-item" onclick="closeSidebar()">
                     <span class="icon">📞</span> Contact Information
                 </a>
-                <a href="{% url 'address_details' %}" class="nav-item">
+                <a href="{% url 'address_details' %}" class="nav-item" onclick="closeSidebar()">
                     <span class="icon">📍</span> Address Details
                 </a>
-                <a href="{% url 'bank_details' %}" class="nav-item">
+                <a href="{% url 'bank_details' %}" class="nav-item" onclick="closeSidebar()">
                     <span class="icon">🏦</span> Bank Details
                 </a>
-                <a href="{% url 'upi_details' %}" class="nav-item">
+                <a href="{% url 'upi_details' %}" class="nav-item" onclick="closeSidebar()">
                     <span class="icon">💸</span> UPI Details
+                </a>
+                <a href="{% url 'nived_details' %}" class="nav-item" onclick="closeSidebar()">
+                    <span class="icon">🔱</span> Nived Details
+                </a>
+                <a href="{% url 'kuldevi_info' %}" class="nav-item" onclick="closeSidebar()">
+                    <span class="icon">🌸</span> Kuldevi Details
                 </a>
             </nav>
         </aside>
@@ -36,7 +45,10 @@
         <main class="content-area">
             <header class="header">
                 <div class="container navbar">
-                    <div class="logo">Ancestor<span>Tree</span></div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="header-toggle-btn" onclick="toggleSidebar()">☰</button>
+                        <div class="logo">Ancestor<span>Tree</span></div>
+                    </div>
                     <nav class="nav-links">
                         <a href="/">Home</a>
                         <a href="/form/">Form</a>
@@ -47,7 +59,16 @@
 
             {% block content %}
             {% endblock %}
-            </main> 
-    </div> 
+            </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('mainWrapper').classList.toggle('sidebar-active');
+        }
+        function closeSidebar() {
+            document.getElementById('mainWrapper').classList.remove('sidebar-active');
+        }
+    </script>
 </body>
 </html>
