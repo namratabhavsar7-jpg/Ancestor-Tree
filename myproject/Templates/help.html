@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Help & Support</h1>
+            <p>Everything you need to know about using Ancestor Tree.</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-title">Frequently Asked Questions</div>
+            <div style="display: flex; flex-direction: column; gap: 25px;">
+                <div>
+                    <h4 style="color: #1a4d2e; margin-bottom: 10px;">How do I start building my tree?</h4>
+                    <p style="color: #7b6a58; line-height: 1.6;">Click on "Get Started" from the Home page or "Add Member" from the sidebar. Follow the 7-step process to fill in all the details for a family member.</p>
+                </div>
+                <div>
+                    <h4 style="color: #1a4d2e; margin-bottom: 10px;">Can I edit records later?</h4>
+                    <p style="color: #7b6a58; line-height: 1.6;">Yes! Go to "View Records" in the sidebar. You will see an ✏️ icon next to each member. Click it to update their information.</p>
+                </div>
+                <div>
+                    <h4 style="color: #1a4d2e; margin-bottom: 10px;">How secure is my family data?</h4>
+                    <p style="color: #7b6a58; line-height: 1.6;">We use secure database systems and sessions to ensure your data is safe and isolated. We don't share your heritage with anyone.</p>
+                </div>
+                <div>
+                    <h4 style="color: #1a4d2e; margin-bottom: 10px;">How do I download my data?</h4>
+                    <p style="color: #7b6a58; line-height: 1.6;">Go to "View Records" and click the "📥 Export Records" button at the top right. This will download a CSV file compatible with Excel.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-card" style="background: #edf5ea; border-color: #dcedc8;">
+            <div class="form-title">Still need help?</div>
+            <p style="color: #4f7942; margin-bottom: 20px;">Our support team is available to assist you with any technical issues.</p>
+            <a href="{% url 'contact' %}" class="submit-btn" style="text-decoration: none;">Message Support</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

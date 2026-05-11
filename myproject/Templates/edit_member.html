@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Edit Member Profile</h1>
+            <p>Update all details for {{ member.first_name }} {{ member.last_name }} in one place.</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <!-- PERSONAL & PHOTO -->
+                <div class="form-card">
+                    <div class="form-title">Basic Details</div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" name="first_name" value="{{ member.first_name }}" placeholder="First Name" required>
+                            <input type="text" name="last_name" value="{{ member.last_name }}" placeholder="Last Name" required>
+                        </div>
+                        <div class="gender-container" style="position: relative;">
+                            <input type="text" id="genderDisplay" value="{{ member.gender }}" readonly placeholder="Select Gender" required style="background: #fafafa; cursor: pointer; width: 100%; padding: 14px 18px; border: 1.5px solid #e0e6ed; border-radius: 12px; outline: none;">
+                            <select name="gender" id="genderSelect" onchange="handleGenderChange()" required style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                                <option value="" disabled>Select Gender</option>
+                                <option value="Male" {% if member.gender == 'Male' %}selected{% endif %}>Male</option>
+                                <option value="Female" {% if member.gender == 'Female' %}selected{% endif %}>Female</option>
+                                <option value="Other" {% if member.gender == 'Other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                        <input type="text" name="goatra" value="{{ member.goatra|default:'' }}" placeholder="Goatra">
+                        <div style="margin-top: 10px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Profile Photo</label>
+                            {% if member.photo %}
+                            <img src="{{ member.photo.url }}" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover; margin-bottom: 10px;">
+                            {% endif %}
+                            <input type="file" name="photo">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTACT -->
+                <div class="form-card">
+                    <div class="form-title">Contact Information</div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" name="contact_number_1" value="{{ member.contact_number_1|default:'' }}" placeholder="Mobile Number">
+                        <input type="text" name="whatsapp_number" value="{{ member.whatsapp_number|default:'' }}" placeholder="WhatsApp Number">
+                        <input type="email" name="email" value="{{ member.email|default:'' }}" placeholder="Email Address">
+                    </div>
+                </div>
+
+                <!-- LOCATION -->
+                <div class="form-card">
+                    <div class="form-title">Address Details</div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" name="state" value="{{ member.state|default:'' }}" placeholder="State">
+                        <input type="text" name="district" value="{{ member.district|default:'' }}" placeholder="District">
+                        <input type="text" name="village" value="{{ member.village|default:'' }}" placeholder="Village/City">
+                        <input type="text" name="pincode" value="{{ member.pincode|default:'' }}" placeholder="Pincode">
+                    </div>
+                </div>
+
+                <!-- FINANCE -->
+                <div class="form-card">
+                    <div class="form-title">Financial Details</div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" name="bank_name" value="{{ member.bank_name|default:'' }}" placeholder="Bank Name">
+                        <input type="text" name="account_number" value="{{ member.account_number|default:'' }}" placeholder="Account Number">
+                        <input type="text" name="upi_id" value="{{ member.upi_id|default:'' }}" placeholder="UPI ID">
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-area" style="display: flex; gap: 20px; justify-content: center;">
+                <button type="submit" class="submit-btn">Save All Changes</button>
+                <a href="{% url 'member_detail' member.pk %}" class="submit-btn" style="background: #7b6a58; text-decoration: none;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    function handleGenderChange() {
+        const genderSelect = document.getElementById('genderSelect');
+        const genderDisplay = document.getElementById('genderDisplay');
+        genderDisplay.value = genderSelect.value;
+    }
+</script>
+{% endblock %}

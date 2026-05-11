@@ -1,73 +1,50 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>About Us</title>
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-</head>
-
-<body>
-
-<header class="header">
-
-    <div class="container navbar">
-
-        <div class="logo">
-
-            Ancestor<span>Tree</span>
-
-        </div>
-
-        <nav class="nav-links">
-
-            <a href="/">Home</a>
-
-            <a href="/form/">Form</a>
-
-            <a href="/about/">About Us</a>
-
-        </nav>
-
-    </div>
-
-</header>
-
-<section class="about-section">
-
+{% block content %}
+<section class="form-section">
     <div class="container">
-
-        <div class="about-card">
-
-            <h1>
-
-                About Ancestor Tree
-
-            </h1>
-
-            <p>
-
-                Ancestor Tree is a digital family
-                heritage platform created to preserve
-                family generations, traditions, and
-                relationships in a modern secure system.
-
-            </p>
-
+        <div class="section-heading">
+            <h1>About Ancestor Tree</h1>
+            <p>Our mission is to bridge the gap between generations through technology.</p>
         </div>
 
+        <div class="form-grid">
+            <div class="form-card">
+                <div class="form-title">Our Vision</div>
+                <p style="line-height: 1.8; color: #7b6a58;">
+                    Ancestor Tree is more than just a database; it's a digital sanctuary for your family's legacy. We believe that every family has a story worth preserving, from the roots of our ancestors to the branches of the newest generation.
+                </p>
+            </div>
+
+            <div class="form-card">
+                <div class="form-title">Secure & Private</div>
+                <p style="line-height: 1.8; color: #7b6a58;">
+                    We prioritize your family's privacy. Our platform uses enterprise-grade security to ensure that your heritage remains accessible only to those you choose to share it with.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-card" style="margin-top: 30px;">
+            <div class="form-title">Key Features</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; margin-top: 20px;">
+                <div>
+                    <div style="font-size: 40px; margin-bottom: 10px;">🌳</div>
+                    <h4 style="color: #1a4d2e;">Tree Mapping</h4>
+                    <p style="font-size: 14px; color: #7b6a58;">Connect generations effortlessly.</p>
+                </div>
+                <div>
+                    <div style="font-size: 40px; margin-bottom: 10px;">🔱</div>
+                    <h4 style="color: #1a4d2e;">Tradition Keeper</h4>
+                    <p style="font-size: 14px; color: #7b6a58;">Save Nived and rituals.</p>
+                </div>
+                <div>
+                    <div style="font-size: 40px; margin-bottom: 10px;">📄</div>
+                    <h4 style="color: #1a4d2e;">Digital Backup</h4>
+                    <p style="font-size: 14px; color: #7b6a58;">Export your data anytime.</p>
+                </div>
+            </div>
+        </div>
     </div>
-
 </section>
-
-</body>
-
-</html>
+{% endblock %}

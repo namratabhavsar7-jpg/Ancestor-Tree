@@ -2,87 +2,100 @@
 {% load static %}
 
 {% block content %}
-<!-- ================= HERO SECTION ================= -->
-<section class="hero-section">
-    <div class="container hero-wrapper">
-        <div class="hero-text">
-            <span class="badge">🌿 Roots of Generations</span>
-            <h1>Digitize Your <br><span>Family Legacy</span></h1>
-            <p>A secure platform to preserve your family's history, traditions, and roots. Pass down your heritage to the next generation with ease and security.</p>
-            <div class="hero-btns">
-                <a href="/form/" class="cta-primary">Get Started Now</a>
-                <a href="/about/" class="cta-secondary">Learn More</a>
+
+<!-- ================= DASHBOARD (Always Visible) ================= -->
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading" style="text-align: left; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <h1 style="font-size: 42px; margin-bottom: 5px;">Family Heritage Dashboard 👋</h1>
+                <p>Welcome to your digital lineage management platform.</p>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <a href="{% url 'personal_info' %}" class="cta-primary" style="padding: 12px 25px; font-size: 14px;">+ Add New Member</a>
             </div>
         </div>
-        <div class="hero-visual">
-            <div class="floating-cards">
-                <div class="f-card c1"><span>👤</span><p>Personal History</p></div>
-                <div class="f-card c2"><span>🔱</span><p>Ritual & Nived</p></div>
-                <div class="f-card c3"><span>📍</span><p>Ancestral Roots</p></div>
-                <div class="f-card c4"><span>🌸</span><p>Kuldevi Details</p></div>
+
+        <!-- STATS GRID -->
+        <div class="stats-grid" style="margin-top: 40px;">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <h3>{{ total_members }}</h3>
+                    <p>Total Members</p>
+                </div>
             </div>
-            <div class="main-circle">
-                <div class="inner-content">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3665/3665910.png" alt="Tree Icon">
+            <div class="stat-card">
+                <div class="stat-icon">👨</div>
+                <div class="stat-info">
+                    <h3>{{ males }}</h3>
+                    <p>Males</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👩</div>
+                <div class="stat-info">
+                    <h3>{{ females }}</h3>
+                    <p>Females</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌍</div>
+                <div class="stat-info">
+                    <h3>{{ locations }}</h3>
+                    <p>Locations</p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
 
-<!-- ================= FEATURES GRID ================= -->
-<section class="features-section">
-    <div class="container">
-        <div class="section-title">
-            <h2>Explore Modules</h2>
-            <p>Every detail matters. Capture your complete family identity through these specialized sections.</p>
-        </div>
-        
-        <div class="feature-grid">
-            <a href="{% url 'personal_info' %}" class="feature-card">
-                <div class="f-icon">👤</div>
-                <h3>Personal Info</h3>
-                <p>Identity, physical traits, and professional details.</p>
-            </a>
-            <a href="{% url 'address_details' %}" class="feature-card">
-                <div class="f-icon">📍</div>
-                <h3>Ancestral Place</h3>
-                <p>Native roots, villages, and permanent locations.</p>
-            </a>
-            <a href="{% url 'nived_details' %}" class="feature-card">
-                <div class="f-icon">🔱</div>
-                <h3>Nived</h3>
-                
-                <p>Preserve your family's unique religious offerings.</p>
-            </a>
-            <a href="{% url 'kuldevi_info' %}" class="feature-card">
-                <div class="f-icon">🌸</div>
-                <h3>Kuldevi / Kuldev</h3>
-                <p>Honoring the primary deities of your lineage.</p>
-            </a>
-        </div>
-    </div>
-</section>
+        <div class="form-grid" style="margin-top: 40px;">
+            <!-- RECENT ACTIVITY -->
+            <div class="form-card" style="grid-column: 1 / span 1;">
+                <div class="form-title" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>🕒 Recent Members</span>
+                    <a href="{% url 'members_list' %}" style="font-size: 14px; color: #4f7942; text-decoration: none;">View All →</a>
+                </div>
+                <div style="margin-top: 20px;">
+                    {% for member in recent_members %}
+                        <div style="display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid #f0f2f5;">
+                            {% if member.photo %}
+                                <img src="{{ member.photo.url }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                            {% else %}
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #edf5ea; display: flex; align-items: center; justify-content: center;">👤</div>
+                            {% endif %}
+                            <div>
+                                <strong style="display: block; font-size: 14px;">{{ member.first_name }} {{ member.last_name }}</strong>
+                                <span style="font-size: 12px; color: #7b6a58;">{{ member.relationship_title }}</span>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p style="color: #999; font-size: 14px; text-align: center; padding: 20px;">No members added yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
 
-<!-- ================= LEGACY SECTION ================= -->
-<section class="legacy-section">
-    <div class="container legacy-content">
-        <div class="legacy-img">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=600" alt="Legacy Image">
-        </div>
-        <div class="legacy-info">
-            <h2>Why Ancestor Tree?</h2>
-            <ul class="legacy-list">
-                <li>
-                    <strong>Secure Digital Vault:</strong> Your data is stored with modern encryption.
-                </li>
-                <li>
-                    <strong>Modular Collection:</strong> Fill details at your own pace, one section at a time.
-                </li>
-                <li>
-                    <strong>Dynamic Exports:</strong> Soon, generate and export your full family tree visual.
-                </li>
-            </ul>
+            <!-- QUICK ACTIONS -->
+            <div class="form-card" style="grid-column: 2 / span 1;">
+                <div class="form-title">⚡ Quick Actions</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                    <a href="{% url 'family_tree' %}" class="feature-card" style="padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 30px;">🌳</div>
+                        <h4 style="margin-top: 10px; font-size: 14px;">View Tree</h4>
+                    </a>
+                    <a href="{% url 'export_members' %}" class="feature-card" style="padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 30px;">📥</div>
+                        <h4 style="margin-top: 10px; font-size: 14px;">Backup Data</h4>
+                    </a>
+                    <a href="{% url 'help' %}" class="feature-card" style="padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 30px;">❓</div>
+                        <h4 style="margin-top: 10px; font-size: 14px;">Help Center</h4>
+                    </a>
+                    <a href="{% url 'contact' %}" class="feature-card" style="padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 30px;">✉️</div>
+                        <h4 style="margin-top: 10px; font-size: 14px;">Support</h4>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>

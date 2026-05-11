@@ -24,24 +24,27 @@
                     <div class="phone-group">
                         <select name="country_code" class="country-select">
                             <option value="+91">🇮🇳 +91</option>
-                            <option value="+1">🇺🇸 +1</option>
                         </select>
-                        <input type="tel" id="contact_number_1" name="contact_number_1" placeholder="Enter Mobile Number" maxlength="10" required>
+                        <input type="text" id="contact_number_1" name="contact_number_1" placeholder="Mobile Number" 
+                               pattern="\d{10}" maxlength="10" minlength="10" required 
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                     </div>
-                    <input type="tel" name="contact_number_2" placeholder="Secondary Mobile Number" maxlength="10">
+                    
+                    <input type="text" name="contact_number_2" placeholder="Secondary Number (Optional)" 
+                           pattern="\d{10}" maxlength="10" minlength="10"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                     
                     <div class="whatsapp-section">
                         <div class="same-checkbox">
                             <input type="checkbox" id="sameAsContact">
-                            <label for="sameAsContact">Same as above</label>
+                            <label for="sameAsContact">Same as Mobile</label>
                         </div>
-                        <div class="phone-group">
-                            <input type="tel" id="whatsapp_number" name="whatsapp_number" placeholder="WhatsApp Number" maxlength="10">
-                        </div>
+                        <input type="text" id="whatsapp_number" name="whatsapp_number" placeholder="WhatsApp Number" 
+                               pattern="\d{10}" maxlength="10" minlength="10"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                     </div>
+
                     <input type="email" name="email" placeholder="Email Address">
-                    <textarea name="address" placeholder="Permanent Address"></textarea>
-                    <textarea name="current_address" placeholder="Current Address"></textarea>
                 </div>
             </div>
 

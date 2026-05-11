@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 25px;">
+                {% if member.photo %}
+                <img src="{{ member.photo.url }}" style="width: 130px; height: 130px; border-radius: 30px; object-fit: cover; border: 4px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                {% else %}
+                <div style="width: 130px; height: 130px; border-radius: 30px; background: #edf5ea; display: flex; align-items: center; justify-content: center; font-size: 60px; border: 4px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">👤</div>
+                {% endif %}
+                <div>
+                    <h1 style="font-size: 42px; margin: 0; color: #1a4d2e;">{{ member.first_name }} {{ member.last_name }}</h1>
+                    <p style="font-size: 20px; color: #4f7942; font-weight: 600; margin-top: 5px;">{{ member.relationship_title }} | <span style="color: #7b6a58; font-weight: 400;">{{ member.gender }}</span></p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <a href="{% url 'edit_member' member.pk %}" class="cta-nav" style="padding: 12px 30px; text-decoration: none;">Edit Profile</a>
+                <a href="{% url 'delete_member' member.pk %}" class="cta-nav" style="background: #e53935; padding: 12px 30px; text-decoration: none;" onclick="return confirm('Confirm deletion?')">Delete</a>
+            </div>
+        </div>
+
+        <div class="form-grid" style="margin-top: 50px;">
+            <!-- CARD 1: IDENTITY -->
+            <div class="form-card">
+                <div class="form-title" style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🆔</span> Identity & Origin
+                </div>
+                <div class="detail-list">
+                    <div class="detail-item"><span>Goatra</span><strong>{{ member.goatra|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>Religion</span><strong>{{ member.religion|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>Nationality</span><strong>{{ member.nationality|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>Physical</span><strong>{{ member.height|default:"-" }} cm / {{ member.weight|default:"-" }} kg</strong></div>
+                </div>
+            </div>
+
+            <!-- CARD 2: FAMILY CONNECTIONS -->
+            <div class="form-card">
+                <div class="form-title" style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🌳</span> Family Tree
+                </div>
+                <div class="detail-list">
+                    <div class="detail-item">
+                        <span>Father</span>
+                        <strong>{% if member.father %}<a href="{% url 'member_detail' member.father.pk %}" class="link">{{ member.father.first_name }}</a>{% else %}-{% endif %}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Mother</span>
+                        <strong>{% if member.mother %}<a href="{% url 'member_detail' member.mother.pk %}" class="link">{{ member.mother.first_name }}</a>{% else %}-{% endif %}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Spouse</span>
+                        <strong>{% if member.spouse %}<a href="{% url 'member_detail' member.spouse.pk %}" class="link">{{ member.spouse.first_name }}</a>{% else %}-{% endif %}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3: CONTACT -->
+            <div class="form-card">
+                <div class="form-title" style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">📞</span> Contact Details
+                </div>
+                <div class="detail-list">
+                    <div class="detail-item"><span>Mobile</span><strong>{{ member.contact_number_1|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>WhatsApp</span><strong>{{ member.whatsapp_number|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>Email</span><strong>{{ member.email|default:"-" }}</strong></div>
+                </div>
+            </div>
+
+            <!-- CARD 4: LOCATION -->
+            <div class="form-card">
+                <div class="form-title" style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">📍</span> Ancestral Place
+                </div>
+                <div class="detail-list">
+                    <div class="detail-item"><span>State</span><strong>{{ member.state|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>District</span><strong>{{ member.district|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>Taluka</span><strong>{{ member.taluka|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>Village</span><strong>{{ member.village|default:"-" }}</strong></div>
+                </div>
+            </div>
+
+            <!-- CARD 5: FINANCE -->
+            <div class="form-card">
+                <div class="form-title" style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🏦</span> Bank & UPI
+                </div>
+                <div class="detail-list">
+                    <div class="detail-item"><span>Bank</span><strong>{{ member.bank_name|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>Acc No.</span><strong>{{ member.account_number|default:"-" }}</strong></div>
+                    <div class="detail-item"><span>UPI ID</span><strong>{{ member.upi_id|default:"-" }}</strong></div>
+                </div>
+            </div>
+
+            <!-- CARD 6: TRADITIONS -->
+            <div class="form-card">
+                <div class="form-title" style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">🔱</span> Deities & Rituals
+                </div>
+                <div class="detail-list">
+                    {% for detail in kuldevi_details %}
+                    <div class="detail-item"><span>{{ detail.dev_type }}</span><strong>{{ detail.name }}</strong></div>
+                    {% empty %}
+                    <p style="color: #999;">No deities linked.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="submit-area">
+            <a href="{% url 'members_list' %}" class="submit-btn" style="background: #7b6a58; text-decoration: none;">← Back to Records</a>
+        </div>
+    </div>
+</section>
+
+<style>
+.detail-list { display: flex; flex-direction: column; gap: 15px; }
+.detail-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f2f5; padding-bottom: 10px; }
+.detail-item span { color: #7b6a58; font-size: 14px; }
+.detail-item strong { color: #1a4d2e; font-size: 15px; }
+.link { color: #4f7942; text-decoration: none; border-bottom: 1px dashed #4f7942; }
+.link:hover { color: #1a4d2e; border-bottom-style: solid; }
+</style>
+{% endblock %}

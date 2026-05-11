@@ -39,6 +39,16 @@
                 <a href="{% url 'kuldevi_info' %}" class="nav-item" onclick="closeSidebar()">
                     <span class="icon">🌸</span> Kuldevi Details
                 </a>
+                <a href="{% url 'family_tree' %}" class="nav-item" onclick="closeSidebar()">
+                    <span class="icon">🌳</span> Family Tree
+                </a>
+                <div style="margin: 20px 0; border-top: 1px solid rgba(255,255,255,0.1);"></div>
+                <a href="{% url 'members_list' %}" class="nav-item" onclick="closeSidebar()" style="background: rgba(76, 175, 80, 0.1) !important;">
+                    <span class="icon">📊</span> View Records
+                </a>
+                <a href="{% url 'help' %}" class="nav-item" onclick="closeSidebar()">
+                    <span class="icon">❓</span> Help & Support
+                </a>
             </nav>
         </aside>
 
@@ -51,7 +61,11 @@
                     </div>
                     <nav class="nav-links">
                         <a href="/">Home</a>
-                        <a href="/form/">Form</a>
+                        <a href="{% url 'members_list' %}">Records</a>
+                        <a href="{% url 'family_tree' %}">Tree</a>
+                        <a href="{% url 'help' %}">Help</a>
+                        <a href="{% url 'contact' %}">Contact</a>
+                        <a href="{% url 'personal_info' %}" class="cta-nav">Add Member</a>
                         <a href="/about/">About</a>
                     </nav>
                 </div>
@@ -69,6 +83,17 @@
         function closeSidebar() {
             document.getElementById('mainWrapper').classList.remove('sidebar-active');
         }
+
+        // Highlight active nav item
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.getAttribute('href') === currentPath) {
+                    item.classList.add('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>

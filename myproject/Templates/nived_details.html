@@ -20,16 +20,21 @@
 
             <div id="food-container">
                 <!-- Initial Entry -->
-                <div class="form-card food-entry">
-                    <div class="form-title">Nived Offering</div>
+                <div class="form-card food-entry" id="food-1">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div class="form-title" style="margin-bottom: 0;">Nived Offering</div>
+                    </div>
                     <div class="form-grid">
                         <input type="text" name="food_name" placeholder="Name of Food / Prasad" required>
                     </div>
                 </div>
-            </div>
 
-            <div style="margin: 20px 0; text-align: right;">
-                <button type="button" class="add-more-btn" onclick="addMoreFood()">+ Add More Food</button>
+                <!-- Add More Button Section -->
+                <div id="add-more-container" style="margin-bottom: 35px; text-align: left;">
+                    <button type="button" class="add-more-btn" onclick="addMoreFood()" style="background: #1a4d2e; display: flex; align-items: center; gap: 8px; color: white; padding: 12px 24px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600;">
+                        <span style="font-size: 20px;">+</span> Add More Food
+                    </button>
+                </div>
             </div>
 
             <div class="submit-area">
@@ -44,38 +49,50 @@ let foodCount = 1;
 function addMoreFood() {
     foodCount++;
     const container = document.getElementById('food-container');
+    const buttonContainer = document.getElementById('add-more-container');
     const newEntry = document.createElement('div');
     newEntry.className = 'form-card food-entry';
+    newEntry.id = `food-${foodCount}`;
     newEntry.style.marginTop = '20px';
     newEntry.innerHTML = `
-        <div class="form-title">Nived Offering</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="form-title" style="margin-bottom: 0;">Nived Offering #${foodCount}</div>
+            <button type="button" onclick="removeFood(${foodCount})" style="background: #ffebee; color: #e53935; border: 1px solid #ffcdd2; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">Remove</button>
+        </div>
         <div class="form-grid">
             <input type="text" name="food_name" placeholder="Name of Food / Prasad" required>
         </div>
     `;
-    container.appendChild(newEntry);
+    container.insertBefore(newEntry, buttonContainer);
+}
+
+function removeFood(id) {
+    const entry = document.getElementById(`food-${id}`);
+    if (entry) {
+        entry.style.opacity = '0';
+        entry.style.transform = 'translateX(20px)';
+        setTimeout(() => {
+            entry.remove();
+        }, 300);
+    }
 }
 </script>
 
 <style>
 .add-more-btn {
-    background-color: var(--primary-green);
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
     transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(26, 77, 46, 0.15);
 }
 .add-more-btn:hover {
-    background-color: var(--accent-brown);
+    background-color: #143d24 !important;
+    transform: translateY(-2px);
 }
 .food-entry {
+    transition: all 0.3s ease;
     animation: fadeIn 0.4s ease;
 }
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 </style>

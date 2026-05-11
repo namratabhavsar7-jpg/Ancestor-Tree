@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Family Tree Visualizer</h1>
+            <p>Explore your lineage and connections in an interactive tree view.</p>
+        </div>
+
+        <div class="form-card" style="background: white; overflow-x: auto; padding: 50px 20px;">
+            <div class="tree">
+                <ul>
+                    <!-- Roots (Members with no father/mother registered) -->
+                    {% for member in members %}
+                        {% if not member.father and not member.mother %}
+                            <li>
+                                <div class="node-wrapper">
+                                    <a href="{% url 'member_detail' member.pk %}" class="tree-node">
+                                        {% if member.photo %}
+                                            <img src="{{ member.photo.url }}" class="tree-img">
+                                        {% else %}
+                                            <span class="tree-icon">👤</span>
+                                        {% endif %}
+                                        <div class="tree-info">
+                                            <span class="name">{{ member.first_name }} {{ member.last_name }}</span>
+                                            <span class="rel">{{ member.relationship_title }}</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                
+                                <!-- Recursive Children (Simplification for prototype) -->
+                                {% if member.children_as_father.all or member.children_as_mother.all %}
+                                <ul>
+                                    {% for child in member.children_as_father.all %}
+                                        <li>
+                                            <a href="{% url 'member_detail' child.pk %}" class="tree-node">
+                                                <div class="tree-info">
+                                                    <span class="name">{{ child.first_name }} {{ child.last_name }}</span>
+                                                    <span class="rel">Child</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                    {% for child in member.children_as_mother.all %}
+                                        <li>
+                                            <a href="{% url 'member_detail' child.pk %}" class="tree-node">
+                                                <div class="tree-info">
+                                                    <span class="name">{{ child.first_name }} {{ child.last_name }}</span>
+                                                    <span class="rel">Child</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% empty %}
+                        <p style="text-align: center; color: #999;">No tree data available. Start by adding members.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* TREE CSS STRUCTURE */
+.tree ul {
+    padding-top: 20px; position: relative;
+    transition: all 0.5s;
+    display: flex;
+    justify-content: center;
+}
+.tree li {
+    float: left; text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 20px 5px 0 5px;
+    transition: all 0.5s;
+}
+.tree li::before, .tree li::after{
+    content: '';
+    position: absolute; top: 0; right: 50%;
+    border-top: 2px solid #ddd;
+    width: 50%; height: 20px;
+}
+.tree li::after{
+    right: auto; left: 50%;
+    border-left: 2px solid #ddd;
+}
+.tree li:only-child::after, .tree li:only-child::before {
+    display: none;
+}
+.tree li:only-child{ padding-top: 0; }
+.tree li:first-child::before, .tree li:last-child::after{
+    border: 0 none;
+}
+.tree li:last-child::before{
+    border-right: 2px solid #ddd;
+    border-radius: 0 5px 0 0;
+}
+.tree li:first-child::after{
+    border-radius: 5px 0 0 0;
+}
+.tree ul ul::before{
+    content: '';
+    position: absolute; top: 0; left: 50%;
+    border-left: 2px solid #ddd;
+    width: 0; height: 20px;
+}
+.tree-node {
+    border: 2px solid #edf5ea;
+    padding: 15px;
+    text-decoration: none;
+    color: #333;
+    display: inline-block;
+    border-radius: 15px;
+    background: white;
+    transition: 0.3s;
+    min-width: 150px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+.tree-node:hover {
+    background: #edf5ea;
+    border-color: #4f7942;
+    transform: translateY(-5px);
+}
+.tree-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    object-fit: cover;
+    border: 2px solid #4f7942;
+}
+.tree-icon {
+    font-size: 30px;
+    display: block;
+    margin-bottom: 5px;
+}
+.tree-info .name {
+    display: block;
+    font-weight: 700;
+    color: #1a4d2e;
+    font-size: 14px;
+}
+.tree-info .rel {
+    font-size: 11px;
+    color: #7b6a58;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+</style>
+{% endblock %}

@@ -6,7 +6,6 @@
     <div class="container">
         <div class="section-heading">
             <h1>Personal Information</h1>
-            <p>Please provide your personal details below.</p>
         </div>
 
         {% if success %}
@@ -19,7 +18,7 @@
             {% csrf_token %}
 
             <div class="form-card">
-                <div class="form-title">Personal Details</div>
+                <div class="form-title">Basic Details</div>
                 <div class="form-grid">
                     <div class="full-name-group">
                         <div class="name-fields">
@@ -28,60 +27,51 @@
                             <input type="text" name="last_name" placeholder="Last Name" required>
                         </div>
                     </div>
-                    <input type="text" name="religion" placeholder="Religion">
-                    <input type="text" name="nationality" placeholder="Nationality">
-                    <select name="gender" id="genderSelect" onchange="toggleOtherGender()">
-                        <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
+                    
+                    <div class="gender-container" style="position: relative;">
+                        <input type="text" id="genderDisplay" readonly placeholder="Select Gender" required style="background: #fafafa; cursor: pointer;">
+                        <select name="gender" id="genderSelect" onchange="handleGenderChange()" required style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
                     <input type="text" name="other_gender" id="other_gender_input" style="display:none;" placeholder="Please specify gender">
 
-                    <select name="relationship_title">
-                        <option value="">Select Relationship</option>
-                        <option value="PARDADI">PARDADI</option>
-                        <option value="PARDADA">PARDADA</option>
-                        <option value="GRAND MOTHER Paternal">GRAND MOTHER Paternal</option>
-                        <option value="GRAND FATHER Paternal">GRAND FATHER Paternal</option>
-                        <option value="FATHER">FATHER</option>
-                        <option value="MOTHER">MOTHER</option>
-                        <option value="DAUGHTER">DAUGHTER</option>
-                        <option value="SON">SON</option>
-                        <option value="BROTHER">BROTHER</option>
-                        <option value="SISTER">SISTER</option>
-                        <option value="GRAND DAUGHTER">GRAND DAUGHTER</option>
-                        <option value="GRAND SON">GRAND SON</option>
-                        <option value="MAMA">MAMA</option>
-                        <option value="MAMI">MAMI</option>
-                        <option value="MASA">MASA</option>
-                        <option value="MASI">MASI</option>
-                        <option value="FAI">FAI</option>
-                        <option value="FUVA">FUVA</option>
-                        <option value="BHATRIJO">BHATRIJO</option>
-                        <option value="BHATRIJI">BHATRIJI</option>
-                        <option value="BHANO">BHANO</option>
-                        <option value="BHANI">BHANI</option>
-                        <option value="SALO">SALO</option>
-                        <option value="SALI">SALI</option>
-                        <option value="MOTAPAPA">MOTAPAPA</option>
-                        <option value="MOTAMOMMY">MOTAMOMMY</option>
-                        <option value="KAKA">KAKA</option>
-                        <option value="KAKI">KAKI</option>
-                        <option value="SASU">SASU</option>
-                        <option value="SASRA">SASRA</option>
-                        <option value="HUSBAND">HUSBAND</option>
-                        <option value="WIFE">WIFE</option>
-                        <option value="BHABHI">BHABHI</option>
-                        <option value="NNAND">NNAND</option>
-                        <option value="GRAND MOTHER Maternal">GRAND MOTHER Maternal</option>
-                        <option value="GRAND FATHER Maternal">GRAND FATHER Maternal</option>
+                    <select name="religion" required>
+                        <option value="Hindu">Hindu</option>
                     </select>
 
+                    <select name="nationality" required>
+                        <option value="Indian">Indian</option>
+                    </select>
+                    
+                    <input type="number" step="0.01" name="height" placeholder="Height (cm)">
+                    <input type="number" step="0.01" name="weight" placeholder="Weight (kg)">
+                    
+                    <div>
+                        <input type="file" name="photo" style="padding: 11px 18px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn">Submit </button>
+            </div>
+        </form>
+    </div>
+</section>
+
 <script>
-    function toggleOtherGender() {
+    function handleGenderChange() {
         const genderSelect = document.getElementById('genderSelect');
+        const genderDisplay = document.getElementById('genderDisplay');
         const otherGenderInput = document.getElementById('other_gender_input');
+        
+        genderDisplay.value = genderSelect.value;
+        
         if (genderSelect.value === 'Other') {
             otherGenderInput.style.display = 'block';
             otherGenderInput.required = true;
@@ -91,16 +81,4 @@
         }
     }
 </script>
-                    <input type="number" name="height" placeholder="Height">
-                    <input type="number" name="weight" placeholder="Weight">
-                    <input type="file" name="photo">
-                </div>
-            </div>
-
-            <div class="submit-area">
-                <button type="submit" class="submit-btn">Submit Personal Details</button>
-            </div>
-        </form>
-    </div>
-</section>
 {% endblock %}

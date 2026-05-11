@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="section-heading">
+            <h1>Contact Us</h1>
+            <p>Have questions or need support? We're here to help.</p>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-card">
+                <div class="form-title">Send a Message</div>
+                <form action="#" method="POST">
+                    {% csrf_token %}
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" placeholder="How can we help you?" style="height: 150px;"></textarea>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-card">
+                <div class="form-title">Contact Information</div>
+                <div style="line-height: 2.5; color: #7b6a58;">
+                    <p><strong>📍 Address:</strong> 123 Heritage Plaza, Digital Valley</p>
+                    <p><strong>📞 Phone:</strong> +91 98765 43210</p>
+                    <p><strong>✉️ Email:</strong> support@ancestortree.com</p>
+                    <p><strong>⏰ Hours:</strong> Mon - Sat, 9:00 AM - 6:00 PM</p>
+                </div>
+                
+                <div style="margin-top: 40px; text-align: center;">
+                    <p style="margin-bottom: 15px;">Follow our journey:</p>
+                    <div style="display: flex; justify-content: center; gap: 20px; font-size: 24px;">
+                        <span>🐦</span> <span>📸</span> <span>📘</span> <span>💼</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

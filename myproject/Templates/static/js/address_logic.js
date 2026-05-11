@@ -1,86 +1,65 @@
 const addressData = {
     "Gujarat": {
         "Ahmedabad": {
-            "City": {
-                "Ahmedabad City": "380001",
-                "Maninagar": "380008"
-            },
-            "Daskroi": {
-                "Bakrol": "382430",
-                "Bareja": "382425"
-            }
+            "City": { "Ahmedabad City": "380001", "Maninagar": "380008" },
+            "Daskroi": { "Bakrol": "382430", "Bareja": "382425" }
         },
         "Gandhinagar": {
-            "Gandhinagar": {
-                "Sector 1": "382001",
-                "Sector 10": "382010"
-            },
-            "Kalol": {
-                "Adalaj": "382421",
-                "Kalol City": "382721"
-            }
+            "Gandhinagar": { "Sector 1": "382001", "Sector 10": "382010" },
+            "Kalol": { "Adalaj": "382421", "Kalol City": "382721" }
         },
         "Gir Somnath": {
-            "Veraval": {
-                "Veraval City": "362265",
-                "Prabhas Patan": "362268",
-                "Adri": "362266"
-            },
-            "Talala": {
-                "Talala City": "362150",
-                "Sasan Gir": "362135",
-                "Borvav": "362150"
-            },
-            "Sutrapada": {
-                "Sutrapada City": "362275",
-                "Dhamlej": "362275"
-            },
-            "Kodinar": {
-                "Kodinar City": "362720",
-                "Chhara": "362720"
-            },
-            "Una": {
-                "Una City": "362560",
-                "Delvada": "362510"
-            },
-            "Gir Gadhada": {
-                "Gir Gadhada City": "362530",
-                "Dhokadva": "362530"
-            }
+            "Veraval": { "Veraval City": "362265", "Prabhas Patan": "362268", "Adri": "362266" },
+            "Talala": { "Talala City": "362150", "Sasan Gir": "362135", "Borvav": "362150" },
+            "Sutrapada": { "Sutrapada City": "362275", "Dhamlej": "362275" },
+            "Kodinar": { "Kodinar City": "362720", "Chhara": "362720" },
+            "Una": { "Una City": "362560", "Delvada": "362510" },
+            "Gir Gadhada": { "Gir Gadhada City": "362530", "Dhokadva": "362530" }
         }
     },
     "Maharashtra": {
         "Mumbai": {
-            "Mumbai City": {
-                "Colaba": "400005",
-                "Dadar": "400014"
-            },
-            "Mumbai Suburban": {
-                "Andheri": "400053",
-                "Bandra": "400050"
-            }
+            "Mumbai City": { "Colaba": "400005", "Dadar": "400014" },
+            "Mumbai Suburban": { "Andheri": "400053", "Bandra": "400050" }
         },
         "Pune": {
-            "Pune City": {
-                "Shivajinagar": "411005",
-                "Kothrud": "411038"
-            },
-            "Haveli": {
-                "Hadapsar": "411028",
-                "Loni Kalbhor": "412201"
-            }
+            "Pune City": { "Shivajinagar": "411005", "Kothrud": "411038" },
+            "Haveli": { "Hadapsar": "411028", "Loni Kalbhor": "412201" }
         }
     }
 };
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Basic Controls
     const stateSelect = document.getElementById('state');
+    const addressTypeSelect = document.getElementById('address_type');
+    
+    // UI Panels
+    const cityFieldsPanel = document.getElementById('city_fields');
+    const villageFieldsPanel = document.getElementById('village_fields');
+
+    // Village Path Fields
     const districtSelect = document.getElementById('district');
     const talukaSelect = document.getElementById('taluka');
     const villageSelect = document.getElementById('village');
-    const pincodeInput = document.getElementById('pincode');
+    const villagePincode = document.getElementById('village_pincode');
 
-    // Populate States
+    // Labels & Warnings
+    const stateWarning = document.getElementById('state-warning');
+    const typeLabel = document.getElementById('type-label');
+    const districtWarning = document.getElementById('district-warning');
+    const talukaLabel = document.getElementById('taluka-label');
+    const talukaWarning = document.getElementById('taluka-warning');
+    const villageLabel = document.getElementById('village-label');
+
+    function resetSelect(select, placeholder, disable = true) {
+        if (select) {
+            select.innerHTML = `<option value="">-- ${placeholder} --</option>`;
+            select.disabled = disable;
+        }
+    }
+
+    // Initialize States
     for (let state in addressData) {
         let option = document.createElement('option');
         option.value = state;
@@ -88,60 +67,86 @@ document.addEventListener('DOMContentLoaded', function() {
         stateSelect.appendChild(option);
     }
 
+    // 1. State -> Address Type
     stateSelect.addEventListener('change', function() {
-        districtSelect.innerHTML = '<option value="">-- Select District --</option>';
-        talukaSelect.innerHTML = '<option value="">-- Select Taluka --</option>';
-        villageSelect.innerHTML = '<option value="">-- Select Village --</option>';
-        pincodeInput.value = '';
-
         if (this.value) {
-            let districts = addressData[this.value];
-            for (let district in districts) {
-                let option = document.createElement('option');
-                option.value = district;
-                option.textContent = district;
-                districtSelect.appendChild(option);
-            }
+            addressTypeSelect.disabled = false;
+            stateWarning.style.display = 'none';
+            typeLabel.style.display = 'block';
+        } else {
+            addressTypeSelect.disabled = true;
+            addressTypeSelect.value = '';
+            stateWarning.style.display = 'block';
+            typeLabel.style.display = 'none';
+            togglePath('');
         }
     });
 
-    districtSelect.addEventListener('change', function() {
-        talukaSelect.innerHTML = '<option value="">-- Select Taluka --</option>';
-        villageSelect.innerHTML = '<option value="">-- Select Village --</option>';
-        pincodeInput.value = '';
+    // 2. Address Type -> Path Selection
+    addressTypeSelect.addEventListener('change', function() {
+        togglePath(this.value);
+    });
 
+    function togglePath(type) {
+        if (type === 'City') {
+            cityFieldsPanel.style.display = 'block';
+            villageFieldsPanel.style.display = 'none';
+        } else if (type === 'Village') {
+            cityFieldsPanel.style.display = 'none';
+            villageFieldsPanel.style.display = 'block';
+            
+            // Reset Village sequence
+            resetSelect(districtSelect, 'Select District', false);
+            let districts = addressData[stateSelect.value];
+            for (let d in districts) {
+                let opt = document.createElement('option');
+                opt.value = d; opt.textContent = d;
+                districtSelect.appendChild(opt);
+            }
+            districtWarning.style.display = 'block';
+            talukaLabel.style.display = 'none';
+            talukaWarning.style.display = 'none';
+            villageLabel.style.display = 'none';
+        } else {
+            cityFieldsPanel.style.display = 'none';
+            villageFieldsPanel.style.display = 'none';
+        }
+    }
+
+    // --- VILLAGE PATH LOGIC ---
+    districtSelect.addEventListener('change', function() {
+        resetSelect(talukaSelect, 'Select Taluka', !this.value);
+        districtWarning.style.display = this.value ? 'none' : 'block';
+        talukaLabel.style.display = this.value ? 'block' : 'none';
         if (this.value) {
             let talukas = addressData[stateSelect.value][this.value];
-            for (let taluka in talukas) {
-                let option = document.createElement('option');
-                option.value = taluka;
-                option.textContent = taluka;
-                talukaSelect.appendChild(option);
+            for (let t in talukas) {
+                let opt = document.createElement('option');
+                opt.value = t; opt.textContent = t;
+                talukaSelect.appendChild(opt);
             }
         }
     });
 
     talukaSelect.addEventListener('change', function() {
-        villageSelect.innerHTML = '<option value="">-- Select Village --</option>';
-        pincodeInput.value = '';
-
+        resetSelect(villageSelect, 'Select Village', !this.value);
+        talukaWarning.style.display = this.value ? 'none' : 'block';
+        villageLabel.style.display = this.value ? 'block' : 'none';
         if (this.value) {
             let villages = addressData[stateSelect.value][districtSelect.value][this.value];
-            for (let village in villages) {
-                let option = document.createElement('option');
-                option.value = village;
-                option.textContent = village;
-                villageSelect.appendChild(option);
+            for (let v in villages) {
+                let opt = document.createElement('option');
+                opt.value = v; opt.textContent = v;
+                villageSelect.appendChild(opt);
             }
         }
     });
 
     villageSelect.addEventListener('change', function() {
         if (this.value) {
-            let pincode = addressData[stateSelect.value][districtSelect.value][talukaSelect.value][this.value];
-            pincodeInput.value = pincode;
+            villagePincode.value = addressData[stateSelect.value][districtSelect.value][talukaSelect.value][this.value];
         } else {
-            pincodeInput.value = '';
+            villagePincode.value = '';
         }
     });
 });
