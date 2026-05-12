@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
@@ -23,7 +23,7 @@
                 
                 <div class="form-grid" style="margin-bottom: 20px;">
                     <div>
-                        <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Step 1: Choose State</label>
+                        <label>State</label>
                         <select name="state" id="state" required style="width: 100%;">
                             <option value="">-- Select State --</option>
                         </select>
@@ -33,7 +33,7 @@
                         <div id="state-warning" style="color: #d9534f; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">
                             ⚠️ Select State first
                         </div>
-                        <label id="type-label" style="display: none; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Step 2: Choose Type</label>
+                        <label id="type-label" style="display: none;">Address Type</label>
                         <select name="address_type" id="address_type" required disabled style="width: 100%;">
                             <option value="">-- Select City/Village --</option>
                             <option value="City">City</option>
@@ -46,27 +46,27 @@
                 <div id="city_fields" style="display: none;">
                     <div class="form-grid">
                         <div>
-                            <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Block Number</label>
+                            <label>Block Number</label>
                             <input type="text" name="block_number" id="block_number" placeholder="Enter Block No.">
                         </div>
 
                         <div>
-                            <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Society Name</label>
+                            <label>Society Name</label>
                             <input type="text" name="society" id="society" placeholder="Enter Society">
                         </div>
 
                         <div>
-                            <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Landmark</label>
+                            <label>Landmark</label>
                             <input type="text" name="landmark" id="landmark" placeholder="Enter Landmark">
                         </div>
                         
                         <div>
-                            <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Area / Street</label>
+                            <label>Area / Street</label>
                             <input type="text" name="area" id="city_area" placeholder="Enter Area">
                         </div>
 
                         <div>
-                            <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Pincode</label>
+                            <label>Pincode</label>
                             <input type="text" name="pincode" id="city_pincode" placeholder="Pincode">
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                 <div id="village_fields" style="display: none;">
                     <div class="form-grid">
                         <div>
-                            <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">District</label>
+                            <label>District</label>
                             <select name="district" id="district">
                                 <option value="">-- Select District --</option>
                             </select>
@@ -84,27 +84,27 @@
 
                         <div>
                             <div id="district-warning" style="color: #d9534f; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">⚠️ Select District first</div>
-                            <label id="taluka-label" style="display: none; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Taluka</label>
+                            <label id="taluka-label" style="display: none;">Taluka</label>
                             <select name="taluka" id="taluka" disabled>
                                 <option value="">-- Select Taluka --</option>
                             </select>
                         </div>
 
                         <div>
-                            <div id="taluka-warning" style="color: #d9534f; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; display: none;">⚠️ Select Taluka first</div>
-                            <label id="village-label" style="display: none; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Village</label>
+                           <div id="taluka-warning" style="color: #d9534f; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; ">⚠️ Select Taluka first</div>
+                            <label id="village-label" style="display: none;">Village</label>
                             <select name="village" id="village" disabled>
                                 <option value="">-- Select Village --</option>
                             </select>
                         </div>
 
                         <div>
-                            <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Area / Street</label>
+                            <label>Area / Street</label>
                             <input type="text" name="area" id="village_area" placeholder="Enter Area">
                         </div>
 
                         <div>
-                            <label style="display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px;">Pincode</label>
+                            <label>Pincode</label>
                             <input type="text" name="pincode" id="village_pincode" placeholder="Pincode" readonly>
                         </div>
                     </div>

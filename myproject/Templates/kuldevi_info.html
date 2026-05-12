@@ -3,116 +3,240 @@
 
 {% block content %}
 <section class="form-section">
-    <div class="container">
+    <div class="container" style="max-width: 850px;">
         <div class="section-heading">
-            <h1>Kuldevi & Kuldev Details</h1>
-            <p>Please provide your Goatra and Deity information.</p>
+            <h1>Step 7: Kuldevi & Deity Details</h1>
+            <p>Please provide your Goatra and Deity information to complete your profile.</p>
         </div>
 
-        {% if success %}
-        <div class="success-message">
-            Details submitted successfully 🎉
-        </div>
-        {% endif %}
-
-        <form method="POST" id="kuldeviDetailsForm">
-            {% csrf_token %}
-
-            <!-- Goatra Section -->
-            <div class="form-card">
-                <div class="form-title">Identity</div>
-                <div class="form-grid">
-                    <input type="text" name="goatra" placeholder="Enter Goatra" required>
-                </div>
-            </div>
-
-            <!-- Deity Details Section -->
-            <div class="form-card">
-                <div class="form-title">Deity Details</div>
-                <div id="deity-container">
-                    <!-- Initial Entry -->
-                    <div class="deity-entry" id="deity-1">
-                        <div class="form-grid" style="grid-template-columns: 1fr 2fr auto; align-items: center; gap: 15px;">
-                            <select name="dev_type" required>
-                                <option value="Kuldevi">Kuldevi</option>
-                                <option value="Kuldev">Kuldev</option>
-                            </select>
-                            <input type="text" name="dev_name" placeholder="Name of Deity" required>
-                            <div style="width: 40px;"></div> <!-- Placeholder for align -->
+        <div id="primary_form_container">
+            <form method="POST" id="kuldeviDetailsForm">
+                {% csrf_token %}
+                <div class="form-card">
+                    <div class="form-title">Identity</div>
+                    <div class="form-grid">
+                        <div>
+                            <label>Goatra</label>
+                            <input type="text" name="goatra" value="{{ member.goatra|default:'' }}" placeholder="Enter Goatra" required>
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top: 20px; text-align: left;">
-                    <button type="button" class="add-more-btn" onclick="addMoreDeity()">+ Add More Deity</button>
+                <div class="form-card">
+                    <div class="form-title">Deity Details</div>
+                    <div id="deity-container">
+                        <div class="deity-entry" id="deity-1">
+                            <div class="form-grid" style="grid-template-columns: 1fr 2fr auto; align-items: end; gap: 15px;">
+                                <div>
+                                    <label>Type</label>
+                                    <select name="dev_type" required>
+                                        <option value="Kuldevi">Kuldevi</option>
+                                        <option value="Kuldev">Kuldev</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Deity Name</label>
+                                    <input type="text" name="dev_name" placeholder="Name of Deity" required>
+                                </div>
+                                <div style="width: 40px; margin-bottom: 5px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button type="button" class="add-more-btn" onclick="addMoreDeity()">+ Add More Deity</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="submit-area">
-                <button type="submit" class="submit-btn">Complete & Save Profile</button>
-            </div>
-        </form>
+                <div class="submit-area">
+                    <button type="submit" class="submit-btn">Complete & Save Profile</button>
+                </div>
+            </form>
+        </div>
     </div>
 </section>
 
-<script>
-let deityCount = 1;
+<!-- MODAL 1: QUESTION -->
+<div id="familyQuestionModal" class="modal-overlay" {% if final %}style="display: flex;"{% endif %}>
+    <div class="modal-content">
+        <h2>Profile Saved! 🎉</h2>
+        <p>Has anyone in your family already filled out this form?</p>
+        <div class="modal-btns" style="flex-direction: column; gap: 15px;">
+            <button class="cta-primary" onclick="showVerificationFlow()" style="width: 100%; padding: 15px;">Yes, this information is already filled above</button>
+            <button class="cta-secondary" onclick="submitNoFamily()" style="width: 100%; padding: 15px;">No, this information is not filled above</button>
+        </div>
+    </div>
+</div>
 
+<!-- MODAL 2: VERIFICATION & LINKING -->
+<div id="familyLinkModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 650px; text-align: left;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">Connect with Family</h2>
+            <button type="button" class="modal-btn btn-no" onclick="backToQuestion()" style="padding: 5px 12px; font-size: 0.8rem;">← Back</button>
+        </div>
+        
+        <div id="search_sub_section">
+            <p style="color: #7b6a58; margin-bottom: 20px;">Enter Aadhaar or Mobile to find your family member.</p>
+            <div class="form-grid">
+                <div>
+                    <label>Aadhaar Card Number</label>
+                    <input type="text" id="verify_aadhar" placeholder="12 digit Aadhaar" maxlength="12">
+                </div>
+                <div>
+                    <label>Mobile Number</label>
+                    <input type="text" id="verify_mobile" placeholder="10 digit Mobile" maxlength="10">
+                </div>
+            </div>
+            <div id="search-error" style="color: #e53935; font-size: 0.85rem; margin-top: 15px; display: none; font-weight: 600;"></div>
+            <div style="margin-top: 25px; text-align: center;">
+                <button type="button" class="submit-btn" onclick="verifyAndSearch(this)">Find Family Member</button>
+            </div>
+        </div>
+
+        <div id="match_result_section" style="display: none; margin-top: 10px;">
+            <div id="member_preview" style="background: #f8fcf8; padding: 25px; border-radius: 20px; border: 1px solid #e0f0e0; margin-bottom: 25px;"></div>
+            
+            <div class="form-grid">
+                <div>
+                    <label>What are they to you?</label>
+                    <select id="what_they_are">
+                        <option value="Father">They are my Father</option>
+                        <option value="Mother">They are my Mother</option>
+                        <option value="Spouse">They are my Spouse</option>
+                        <option value="Son">They are my Son</option>
+                        <option value="Daughter">They are my Daughter</option>
+                    </select>
+                </div>
+                <div>
+                    <label>What are you to them?</label>
+                    <select id="what_i_am_select">
+                        <option value="Son">I am their Son</option>
+                        <option value="Daughter">I am their Daughter</option>
+                        <option value="Father">I am their Father</option>
+                        <option value="Mother">I am their Mother</option>
+                        <option value="Wife">I am their Wife</option>
+                        <option value="Husband">I am their Husband</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-btns" style="margin-top: 30px; justify-content: flex-start;">
+                <button type="button" class="modal-btn btn-yes" onclick="linkWithMember(this)">Link & Generate Tree</button>
+                <button type="button" class="modal-btn btn-no" onclick="backToSearch()">← Try Another Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showVerificationFlow() {
+    document.getElementById('familyQuestionModal').style.display = 'none';
+    document.getElementById('familyLinkModal').style.display = 'flex';
+}
+function backToQuestion() {
+    document.getElementById('familyLinkModal').style.display = 'none';
+    document.getElementById('familyQuestionModal').style.display = 'flex';
+}
+function backToSearch() {
+    document.getElementById('match_result_section').style.display = 'none';
+    document.getElementById('search_sub_section').style.display = 'block';
+}
+function closeModals() {
+    document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+}
+
+async function verifyAndSearch(btn) {
+    const aadhar = document.getElementById('verify_aadhar').value.trim();
+    const mobile = document.getElementById('verify_mobile').value.trim();
+    const errorDiv = document.getElementById('search-error');
+    errorDiv.style.display = 'none';
+
+    if (!aadhar && !mobile) { alert("Please enter Aadhaar or Mobile."); return; }
+    
+    const orig = btn.innerText;
+    btn.disabled = true; btn.innerText = "Searching Database...";
+    
+    try {
+        const response = await fetch(`/search-family-member/?aadhar=${encodeURIComponent(aadhar)}&mobile=${encodeURIComponent(mobile)}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            const m = data.member;
+            let avatar = m.photo_url 
+                ? `<img src="${m.photo_url}" style="width: 70px; height: 70px; border-radius: 20px; object-fit: cover; border: 3px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">`
+                : `<div style="width: 70px; height: 70px; background: #4f7942; color: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 2rem;">${m.name.charAt(0)}</div>`;
+
+            document.getElementById('member_preview').innerHTML = `
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    ${avatar}
+                    <div>
+                        <h4 style="margin: 0; color: #1a4d2e; font-size: 1.3rem;">${m.name}</h4>
+                        <p style="margin: 5px 0; color: #4f7942; font-weight: 600; font-size: 0.9rem;">📍 Village: ${m.village}</p>
+                        <div style="display: flex; gap: 10px; margin-top: 8px;">
+                            <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem;">👨 Father: ${m.father_name}</span>
+                            <span style="background: #fce4ec; color: #c2185b; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem;">👩 Mother: ${m.mother_name}</span>
+                        </div>
+                    </div>
+                </div><input type="hidden" id="found_member_id" value="${m.id}">`;
+            document.getElementById('search_sub_section').style.display = 'none';
+            document.getElementById('match_result_section').style.display = 'block';
+        } else {
+            errorDiv.innerText = "⚠️ " + (data.message || "No matching family member found.");
+            errorDiv.style.display = 'block';
+        }
+    } catch (e) { alert("System communication error."); }
+    finally { btn.disabled = false; btn.innerText = orig; }
+}
+
+async function linkWithMember(btn) {
+    const orig = btn.innerText;
+    btn.disabled = true; btn.innerText = "Linking Profiles...";
+    const fd = new FormData();
+    fd.append('has_family', 'Yes');
+    fd.append('existing_member_id', document.getElementById('found_member_id').value);
+    fd.append('what_they_are', document.getElementById('what_they_are').value);
+    fd.append('what_i_am', document.getElementById('what_i_am_select').value);
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    try {
+        const res = await fetch('{% url "connect_family" %}', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.status === 'success') window.location.href = data.redirect;
+        else alert(data.message);
+    } catch (e) { alert("Linking failed."); }
+    finally { btn.disabled = false; btn.innerText = orig; }
+}
+
+async function submitNoFamily() {
+    const fd = new FormData();
+    fd.append('has_family', 'No');
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    const res = await fetch('{% url "connect_family" %}', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (data.status === 'success') window.location.href = data.redirect;
+}
+
+let deityCount = 1;
 function addMoreDeity() {
     deityCount++;
     const container = document.getElementById('deity-container');
-    const newEntry = document.createElement('div');
-    newEntry.className = 'deity-entry';
-    newEntry.id = `deity-${deityCount}`;
-    newEntry.style.marginTop = '15px';
-    newEntry.innerHTML = `
-        <div class="form-grid" style="grid-template-columns: 1fr 2fr auto; align-items: center; gap: 15px;">
-            <select name="dev_type" required>
-                <option value="Kuldevi">Kuldevi</option>
-                <option value="Kuldev">Kuldev</option>
-            </select>
-            <input type="text" name="dev_name" placeholder="Name of Deity" required>
-            <button type="button" onclick="removeDeity(${deityCount})" style="background: #ffebee; color: #e53935; border: 1px solid #ffcdd2; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600;">✕</button>
-        </div>
-    `;
-    container.appendChild(newEntry);
-}
-
-function removeDeity(id) {
-    const entry = document.getElementById(`deity-${id}`);
-    if (entry) {
-        entry.style.opacity = '0';
-        entry.style.transform = 'translateY(-10px)';
-        setTimeout(() => entry.remove(), 300);
-    }
+    const div = document.createElement('div');
+    div.className = 'deity-entry';
+    div.id = `deity-${deityCount}`;
+    div.style.marginTop = '15px';
+    div.innerHTML = `
+        <div class="form-grid" style="grid-template-columns: 1fr 2fr auto; align-items: end; gap: 15px;">
+            <div><label>Type</label><select name="dev_type" required><option value="Kuldevi">Kuldevi</option><option value="Kuldev">Kuldev</option></select></div>
+            <div><label>Deity Name</label><input type="text" name="dev_name" placeholder="Name of Deity" required></div>
+            <button type="button" class="remove-row-btn" onclick="this.parentElement.parentElement.remove()" style="margin-bottom: 5px; height: 48px;">✕</button>
+        </div>`;
+    container.appendChild(div);
 }
 </script>
 
 <style>
-.deity-entry {
-    transition: all 0.3s ease;
-    animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.add-more-btn {
-    background: #edf5ea;
-    color: #4f7942;
-    padding: 12px 24px;
-    border: 1px dashed #4f7942;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.add-more-btn:hover {
-    background: #4f7942;
-    color: white;
-}
+.cta-primary { background: #1a4d2e; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.cta-primary:hover { background: #143d24; transform: translateY(-2px); }
+.cta-secondary { background: white; color: #1a4d2e; border: 1.5px solid #1a4d2e; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.cta-secondary:hover { background: #f1f8e9; }
+.remove-row-btn { background: #ffebee; color: #e53935; border: 1px solid #ffcdd2; border-radius: 8px; cursor: pointer; font-weight: 700; width: 45px; }
 </style>
 {% endblock %}

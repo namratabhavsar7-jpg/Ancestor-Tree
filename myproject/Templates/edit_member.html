@@ -3,89 +3,317 @@
 
 {% block content %}
 <section class="form-section">
-    <div class="container">
+    <div class="container" style="max-width: 900px;">
         <div class="section-heading">
             <h1>Edit Member Profile</h1>
-            <p>Update all details for {{ member.first_name }} {{ member.last_name }} in one place.</p>
+            <p>Update comprehensive information for {{ member.first_name }} {{ member.last_name }}.</p>
         </div>
 
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            
-            <div class="form-grid">
-                <!-- PERSONAL & PHOTO -->
-                <div class="form-card">
-                    <div class="form-title">Basic Details</div>
-                    <div style="display: flex; flex-direction: column; gap: 15px;">
-                        <div style="display: flex; gap: 10px;">
+
+            <!-- SECTION 1: PERSONAL DETAILS -->
+            <div class="form-card">
+                <div class="form-title">1. Personal Information</div>
+                <div class="form-grid">
+                    <div class="full-name-group">
+                        <label>Full Name</label>
+                        <div class="name-fields">
                             <input type="text" name="first_name" value="{{ member.first_name }}" placeholder="First Name" required>
+                            <input type="text" name="middle_name" value="{{ member.middle_name|default:'' }}" placeholder="Middle Name">
                             <input type="text" name="last_name" value="{{ member.last_name }}" placeholder="Last Name" required>
                         </div>
-                        <div class="gender-container" style="position: relative;">
-                            <input type="text" id="genderDisplay" value="{{ member.gender }}" readonly placeholder="Select Gender" required style="background: #fafafa; cursor: pointer; width: 100%; padding: 14px 18px; border: 1.5px solid #e0e6ed; border-radius: 12px; outline: none;">
-                            <select name="gender" id="genderSelect" onchange="handleGenderChange()" required style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
-                                <option value="" disabled>Select Gender</option>
-                                <option value="Male" {% if member.gender == 'Male' %}selected{% endif %}>Male</option>
-                                <option value="Female" {% if member.gender == 'Female' %}selected{% endif %}>Female</option>
-                                <option value="Other" {% if member.gender == 'Other' %}selected{% endif %}>Other</option>
-                            </select>
-                        </div>
-                        <input type="text" name="goatra" value="{{ member.goatra|default:'' }}" placeholder="Goatra">
-                        <div style="margin-top: 10px;">
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Profile Photo</label>
-                            {% if member.photo %}
-                            <img src="{{ member.photo.url }}" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover; margin-bottom: 10px;">
-                            {% endif %}
-                            <input type="file" name="photo">
-                        </div>
+                    </div>
+                    
+                    <div>
+                        <label>Gender</label>
+                        <select name="gender" id="genderSelect" onchange="handleGenderChange()" required>
+                            <option value="Male" {% if member.gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if member.gender == 'Female' %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if member.gender == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+
+                    <div id="other_gender_div" style="display:{% if member.gender == 'Other' %}block{% else %}none{% endif %};">
+                        <label>Specify Gender</label>
+                        <input type="text" name="other_gender" value="{{ member.other_gender|default:'' }}" placeholder="Specify Gender">
+                    </div>
+
+                    <div>
+                        <label>Religion</label>
+                        <input type="text" name="religion" value="{{ member.religion|default:'Hindu' }}" placeholder="Religion">
+                    </div>
+
+                    <div>
+                        <label>Nationality</label>
+                        <input type="text" name="nationality" value="{{ member.nationality|default:'Indian' }}" placeholder="Nationality">
+                    </div>
+
+                    <div>
+                        <label>Height (cm)</label>
+                        <input type="number" step="0.01" name="height" value="{{ member.height|default:'' }}" placeholder="Height">
+                    </div>
+
+                    <div>
+                        <label>Weight (kg)</label>
+                        <input type="number" step="0.01" name="weight" value="{{ member.weight|default:'' }}" placeholder="Weight">
+                    </div>
+
+                    <div style="grid-column: 1 / -1;">
+                        <label>Profile Photo</label>
+                        {% if member.photo %}
+                            <img src="{{ member.photo.url }}" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; border: 2px solid #4f7942;">
+                        {% endif %}
+                        <input type="file" name="photo">
                     </div>
                 </div>
+            </div>
 
-                <!-- CONTACT -->
-                <div class="form-card">
-                    <div class="form-title">Contact Information</div>
-                    <div style="display: flex; flex-direction: column; gap: 15px;">
-                        <input type="text" name="contact_number_1" value="{{ member.contact_number_1|default:'' }}" placeholder="Mobile Number">
-                        <input type="text" name="whatsapp_number" value="{{ member.whatsapp_number|default:'' }}" placeholder="WhatsApp Number">
-                        <input type="email" name="email" value="{{ member.email|default:'' }}" placeholder="Email Address">
+            <!-- SECTION 2: CONTACT DETAILS -->
+            <div class="form-card">
+                <div class="form-title">2. Contact Information</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Mobile Number</label>
+                        <input type="text" name="contact_number_1" value="{{ member.contact_number_1|default:'' }}" placeholder="Primary Mobile">
+                    </div>
+                    <div>
+                        <label>Secondary Number</label>
+                        <input type="text" name="contact_number_2" value="{{ member.contact_number_2|default:'' }}" placeholder="Secondary Number">
+                    </div>
+                    <div>
+                        <label>WhatsApp Number</label>
+                        <input type="text" name="whatsapp_number" value="{{ member.whatsapp_number|default:'' }}" placeholder="WhatsApp">
+                    </div>
+                    <div>
+                        <label>Email Address</label>
+                        <input type="email" name="email" value="{{ member.email|default:'' }}" placeholder="Email">
                     </div>
                 </div>
+            </div>
 
-                <!-- LOCATION -->
-                <div class="form-card">
-                    <div class="form-title">Address Details</div>
-                    <div style="display: flex; flex-direction: column; gap: 15px;">
+            <!-- SECTION 3: LOCATION DETAILS -->
+            <div class="form-card">
+                <div class="form-title">3. Location Details</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Address Type</label>
+                        <select name="address_type" id="address_type" onchange="toggleAddressFields()">
+                            <option value="City" {% if member.address_type == 'City' %}selected{% endif %}>City</option>
+                            <option value="Village" {% if member.address_type == 'Village' %}selected{% endif %}>Village</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>State</label>
                         <input type="text" name="state" value="{{ member.state|default:'' }}" placeholder="State">
+                    </div>
+                </div>
+
+                <!-- City Path -->
+                <div id="city_path" style="display:{% if member.address_type == 'City' %}block{% else %}none{% endif %}; margin-top: 20px;">
+                    <div class="form-grid">
+                        <div>
+                            <label>Block No.</label>
+                            <input type="text" name="block_number" value="{{ member.block_number|default:'' }}" placeholder="Block No.">
+                        </div>
+                        <div>
+                            <label>Society</label>
+                            <input type="text" name="society" value="{{ member.society|default:'' }}" placeholder="Society">
+                        </div>
+                        <div>
+                            <label>Landmark</label>
+                            <input type="text" name="landmark" value="{{ member.landmark|default:'' }}" placeholder="Landmark">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shared Fields -->
+                <div class="form-grid" style="margin-top: 20px;">
+                    <div>
+                        <label>District</label>
                         <input type="text" name="district" value="{{ member.district|default:'' }}" placeholder="District">
+                    </div>
+                    <div>
+                        <label>Taluka</label>
+                        <input type="text" name="taluka" value="{{ member.taluka|default:'' }}" placeholder="Taluka">
+                    </div>
+                    <div>
+                        <label>Village / City Name</label>
                         <input type="text" name="village" value="{{ member.village|default:'' }}" placeholder="Village/City">
+                    </div>
+                    <div>
+                        <label>Area / Street</label>
+                        <input type="text" name="area" value="{{ member.area|default:'' }}" placeholder="Area">
+                    </div>
+                    <div>
+                        <label>Pincode</label>
                         <input type="text" name="pincode" value="{{ member.pincode|default:'' }}" placeholder="Pincode">
                     </div>
                 </div>
+            </div>
 
-                <!-- FINANCE -->
-                <div class="form-card">
-                    <div class="form-title">Financial Details</div>
-                    <div style="display: flex; flex-direction: column; gap: 15px;">
+            <!-- SECTION 4: JOB & FINANCE -->
+            <div class="form-card">
+                <div class="form-title">4. Job & Finance</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Occupation</label>
+                        <input type="text" name="occupation" value="{{ member.occupation|default:'' }}" placeholder="Occupation">
+                    </div>
+                    <div>
+                        <label>Job Type</label>
+                        <input type="text" name="job_type" value="{{ member.job_type|default:'' }}" placeholder="Job Type">
+                    </div>
+                    <div>
+                        <label>Monthly Income</label>
+                        <input type="number" name="monthly_income" value="{{ member.monthly_income|default:'' }}" placeholder="Monthly Income">
+                    </div>
+                    <div>
+                        <label>Bank Name</label>
                         <input type="text" name="bank_name" value="{{ member.bank_name|default:'' }}" placeholder="Bank Name">
+                    </div>
+                    <div>
+                        <label>Account Number</label>
                         <input type="text" name="account_number" value="{{ member.account_number|default:'' }}" placeholder="Account Number">
+                    </div>
+                    <div>
+                        <label>IFSC Code</label>
+                        <input type="text" name="ifsc_code" value="{{ member.ifsc_code|default:'' }}" placeholder="IFSC Code">
+                    </div>
+                    <div>
+                        <label>UPI ID</label>
                         <input type="text" name="upi_id" value="{{ member.upi_id|default:'' }}" placeholder="UPI ID">
+                    </div>
+                    <div>
+                        <label>UPI Display Name</label>
+                        <input type="text" name="upi_name" value="{{ member.upi_name|default:'' }}" placeholder="UPI Name">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: IDENTITY & DEITY -->
+            <div class="form-card">
+                <div class="form-title">5. Identity & Deity</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Aadhaar Number</label>
+                        <input type="text" name="aadhar" value="{{ member.aadhar_card_number|default:'' }}" placeholder="Aadhaar">
+                    </div>
+                    <div>
+                        <label>PAN Card Number</label>
+                        <input type="text" name="pan" value="{{ member.pan_card_number|default:'' }}" placeholder="PAN Card">
+                    </div>
+                    <div>
+                        <label>Goatra</label>
+                        <input type="text" name="goatra" value="{{ member.goatra|default:'' }}" placeholder="Goatra">
+                    </div>
+                </div>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+                
+                <div class="form-grid">
+                    <div>
+                        <label>Nived Foods</label>
+                        <div id="nived-container">
+                            {% for food in nived_foods %}
+                            <div class="dynamic-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <input type="text" name="food_name" value="{{ food.food_name }}" placeholder="Food Name">
+                                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">✕</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="add-more-btn" onclick="addNivedRow()" style="margin-bottom: 20px;">+ Add Food</button>
+                    </div>
+
+                    <div>
+                        <label>Deity Details</label>
+                        <div id="deity-container">
+                            {% for deity in deities %}
+                            <div class="dynamic-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <select name="dev_type" style="width: 120px;">
+                                    <option value="Kuldevi" {% if deity.dev_type == 'Kuldevi' %}selected{% endif %}>Kuldevi</option>
+                                    <option value="Kuldev" {% if deity.dev_type == 'Kuldev' %}selected{% endif %}>Kuldev</option>
+                                </select>
+                                <input type="text" name="dev_name" value="{{ deity.name }}" placeholder="Deity Name">
+                                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">✕</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="add-more-btn" onclick="addDeityRow()">+ Add Deity</button>
                     </div>
                 </div>
             </div>
 
             <div class="submit-area" style="display: flex; gap: 20px; justify-content: center;">
                 <button type="submit" class="submit-btn">Save All Changes</button>
-                <a href="{% url 'member_detail' member.pk %}" class="submit-btn" style="background: #7b6a58; text-decoration: none;">Cancel</a>
+                <a href="{% url 'member_detail' member.pk %}" class="submit-btn" style="background: #7b6a58; text-decoration: none;">Cancel & Exit</a>
             </div>
         </form>
     </div>
 </section>
 
 <script>
-    function handleGenderChange() {
-        const genderSelect = document.getElementById('genderSelect');
-        const genderDisplay = document.getElementById('genderDisplay');
-        genderDisplay.value = genderSelect.value;
-    }
+function handleGenderChange() {
+    const select = document.getElementById('genderSelect');
+    const div = document.getElementById('other_gender_div');
+    div.style.display = select.value === 'Other' ? 'block' : 'none';
+}
+
+function toggleAddressFields() {
+    const type = document.getElementById('address_type').value;
+    document.getElementById('city_path').style.display = type === 'City' ? 'block' : 'none';
+}
+
+function addNivedRow() {
+    const container = document.getElementById('nived-container');
+    const div = document.createElement('div');
+    div.className = 'dynamic-row';
+    div.style = 'display: flex; gap: 10px; margin-bottom: 10px;';
+    div.innerHTML = `
+        <input type="text" name="food_name" placeholder="Food Name">
+        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">✕</button>
+    `;
+    container.appendChild(div);
+}
+
+function addDeityRow() {
+    const container = document.getElementById('deity-container');
+    const div = document.createElement('div');
+    div.className = 'dynamic-row';
+    div.style = 'display: flex; gap: 10px; margin-bottom: 10px;';
+    div.innerHTML = `
+        <select name="dev_type" style="width: 120px;">
+            <option value="Kuldevi">Kuldevi</option>
+            <option value="Kuldev">Kuldev</option>
+        </select>
+        <input type="text" name="dev_name" placeholder="Deity Name">
+        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">✕</button>
+    `;
+    container.appendChild(div);
+}
 </script>
+
+<style>
+.remove-row-btn {
+    background: #ffebee;
+    color: #e53935;
+    border: 1px solid #ffcdd2;
+    padding: 0 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+}
+.remove-row-btn:hover { background: #ffcdd2; }
+.add-more-btn {
+    background: #edf5ea;
+    color: #4f7942;
+    border: 1px dashed #4f7942;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.add-more-btn:hover { background: #4f7942; color: white; }
+</style>
 {% endblock %}

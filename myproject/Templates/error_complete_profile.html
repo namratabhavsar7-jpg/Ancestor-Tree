@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section" style="min-height: 80vh; display: flex; align-items: center;">
+    <div class="container" style="max-width: 600px;">
+        <div class="form-card" style="text-align: center; padding: 60px; border-radius: 30px;">
+            <div style="font-size: 80px; margin-bottom: 30px;">🔐</div>
+            <h1 style="color: #1a4d2e; font-size: 32px; margin-bottom: 20px;">Access Restricted</h1>
+            <p style="color: #7b6a58; font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px;">
+                {{ message|default:"You must complete the full 7-step registration process and connect with your family before you can view these records." }}
+            </p>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <a href="{% url 'personal_info' %}" class="submit-btn" style="text-decoration: none; padding: 18px;">
+                    Start / Resume Registration
+                </a>
+                <a href="{% url 'home' %}" style="color: #7b6a58; text-decoration: none; font-weight: 600;">
+                    Return to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -46,6 +46,12 @@ body{
     color:#78350b;
 }
 
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .nav-links{
     display:flex;
     gap:35px;
@@ -505,6 +511,14 @@ body{
 }
 /* FORM */
 
+label {
+    display: block;
+    font-size: 0.8rem;
+    color: #4f7942;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
 .form-section{
     padding:80px 0;
 }
@@ -741,6 +755,102 @@ body{
     border: 1px solid #c3e6cb;
     font-weight: 500;
     animation: slideDown 0.5s ease;
+}
+
+/* MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 24px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    text-align: center;
+    animation: modalSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content h2 {
+    color: #1a4d2e;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.modal-content p {
+    color: #7b6a58;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.modal-btns {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 12px 35px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+    font-size: 1rem;
+}
+
+.btn-yes {
+    background: #4f7942;
+    color: white;
+}
+
+.btn-yes:hover {
+    background: #3d6133;
+    transform: translateY(-2px);
+}
+
+.btn-no {
+    background: #f8f7f4;
+    color: #5c4033;
+    border: 1px solid #ddd;
+}
+
+.btn-no:hover {
+    background: #eee;
+}
+
+.modal-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+}
+
+.modal-form-grid label {
+    margin-bottom: 5px;
+}
+
+@media(max-width:576px){
+    .modal-content {
+        padding: 30px 20px;
+    }
 }
 
 @keyframes slideDown {

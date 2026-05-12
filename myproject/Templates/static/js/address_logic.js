@@ -103,9 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 opt.value = d; opt.textContent = d;
                 districtSelect.appendChild(opt);
             }
+            
+            // Initial Village Path state: Labels hidden, Warnings shown
             districtWarning.style.display = 'block';
             talukaLabel.style.display = 'none';
-            talukaWarning.style.display = 'none';
+            talukaWarning.style.display = 'block';
             villageLabel.style.display = 'none';
         } else {
             cityFieldsPanel.style.display = 'none';
@@ -116,29 +118,39 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- VILLAGE PATH LOGIC ---
     districtSelect.addEventListener('change', function() {
         resetSelect(talukaSelect, 'Select Taluka', !this.value);
-        districtWarning.style.display = this.value ? 'none' : 'block';
-        talukaLabel.style.display = this.value ? 'block' : 'none';
+        
         if (this.value) {
+            districtWarning.style.display = 'none';
+            talukaLabel.style.display = 'block';
+            
             let talukas = addressData[stateSelect.value][this.value];
             for (let t in talukas) {
                 let opt = document.createElement('option');
                 opt.value = t; opt.textContent = t;
                 talukaSelect.appendChild(opt);
             }
+        } else {
+            districtWarning.style.display = 'block';
+            talukaLabel.style.display = 'none';
         }
     });
 
     talukaSelect.addEventListener('change', function() {
         resetSelect(villageSelect, 'Select Village', !this.value);
-        talukaWarning.style.display = this.value ? 'none' : 'block';
-        villageLabel.style.display = this.value ? 'block' : 'none';
+        
         if (this.value) {
+            talukaWarning.style.display = 'none';
+            villageLabel.style.display = 'block';
+            
             let villages = addressData[stateSelect.value][districtSelect.value][this.value];
             for (let v in villages) {
                 let opt = document.createElement('option');
                 opt.value = v; opt.textContent = v;
                 villageSelect.appendChild(opt);
             }
+        } else {
+            talukaWarning.style.display = 'block';
+            villageLabel.style.display = 'none';
         }
     });
 

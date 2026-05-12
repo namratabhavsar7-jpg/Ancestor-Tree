@@ -25,7 +25,10 @@
                         <div class="form-title" style="margin-bottom: 0;">Nived Offering</div>
                     </div>
                     <div class="form-grid">
-                        <input type="text" name="food_name" placeholder="Name of Food / Prasad" required>
+                        <div>
+                            <label>Food / Prasad Name</label>
+                            <input type="text" name="food_name" placeholder="Name of Food / Prasad" required>
+                        </div>
                     </div>
                 </div>
 
@@ -60,7 +63,10 @@ function addMoreFood() {
             <button type="button" onclick="removeFood(${foodCount})" style="background: #ffebee; color: #e53935; border: 1px solid #ffcdd2; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;">Remove</button>
         </div>
         <div class="form-grid">
-            <input type="text" name="food_name" placeholder="Name of Food / Prasad" required>
+            <div>
+                <label>Food / Prasad Name</label>
+                <input type="text" name="food_name" placeholder="Name of Food / Prasad" required>
+            </div>
         </div>
     `;
     container.insertBefore(newEntry, buttonContainer);

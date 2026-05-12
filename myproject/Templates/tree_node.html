@@ -1,0 +1,30 @@
+<li>
+    <div class="member-card">
+        <a href="{% url 'member_detail' m.pk %}" style="text-decoration: none; color: inherit;">
+            <div class="m-avatar">
+                {% if m.photo %}
+                    <img src="{{ m.photo.url }}">
+                {% else %}
+                    <span>{{ m.first_name|first }}{{ m.last_name|first }}</span>
+                {% endif %}
+            </div>
+            <div class="m-info">
+                <p class="m-name">{{ m.first_name }} {{ m.last_name }}</p>
+                <p class="m-relation">{{ m.relationship_title|default:"Member" }}</p>
+            </div>
+        </a>
+    </div>
+    
+    {% if m.children_as_father.all or m.children_as_mother.all %}
+        <ul>
+            {% for child in m.children_as_father.all %}
+                {% include "tree_node.html" with m=child %}
+            {% endfor %}
+            {% for child in m.children_as_mother.all %}
+                {% if not child.father %}
+                    {% include "tree_node.html" with m=child %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

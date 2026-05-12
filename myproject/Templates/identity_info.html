@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container" style="max-width: 800px;">
+        <div class="section-heading">
+            <h1>Step 6: Identity Details</h1>
+            <p>Please provide your government identity information for verification.</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-card">
+                <div class="form-title">Verification Cards</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Aadhaar Card Number</label>
+                        <input type="text" name="aadhar" placeholder="12 digit Aadhaar Number" 
+                               pattern="\d{12}" maxlength="12" minlength="12" required
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                    </div>
+                    <div>
+                        <label>PAN Card Number (Optional)</label>
+                        <input type="text" name="pan" placeholder="10 digit PAN Number" 
+                               maxlength="10" style="text-transform: uppercase;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn">Continue to Nived Details</button>
+                <a href="{% url 'upi_details' %}" style="display: block; margin-top: 15px; color: #7b6a58; text-decoration: none;">← Back to UPI Details</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

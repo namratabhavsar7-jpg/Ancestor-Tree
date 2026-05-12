@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div style="width: 100%; max-width: 450px; margin: auto;">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <div style="font-size: 32px; font-weight: 800; color: #1a4d2e; letter-spacing: -1px; margin-bottom: 8px;">
+            Ancestor<span style="color: #4f7942;">Tree</span>
+        </div>
+        <p style="color: #7b6a58; font-size: 1.05rem;">Access your personal family legacy</p>
+    </div>
+
+    <div class="form-card" style="padding: 45px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); border: 1px solid #f0f0f0; background: white;">
+        <h2 style="font-size: 24px; color: #1a4d2e; margin-bottom: 10px; font-weight: 700;">Sign in</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 30px;">Enter your details to continue to your dashboard.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="success-message" style="margin-bottom: 25px; padding: 15px; border-radius: 12px; font-size: 0.9rem; font-weight: 600;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if error %}
+        <div style="background: #fff5f5; color: #e53935; padding: 15px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; margin-bottom: 25px; border: 1px solid #fee2e2; display: flex; align-items: center; gap: 10px;">
+            <span>⚠️</span> {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <div>
+                    <label style="color: #4b5563; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; display: block;">Username or Email</label>
+                    {{ form.login_id }}
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label style="color: #4b5563; font-size: 0.85rem; font-weight: 600; margin-bottom: 0;">Password</label>
+                        <a href="#" style="font-size: 0.8rem; color: #4f7942; text-decoration: none; font-weight: 600;">Forgot?</a>
+                    </div>
+                    {{ form.password }}
+                </div>
+                
+                <button type="submit" class="submit-btn" style="width: 100%; padding: 16px; font-size: 1rem; margin-top: 10px; border-radius: 14px; box-shadow: 0 4px 12px rgba(79, 121, 66, 0.2);">
+                    Sign in to account
+                </button>
+            </div>
+        </form>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <p style="color: #64748b; font-size: 0.95rem;">Don't have an account? 
+                <a href="{% url 'register' %}" style="color: #4f7942; font-weight: 700; text-decoration: none; margin-left: 5px; border-bottom: 2px solid rgba(79, 121, 66, 0.1); padding-bottom: 2px;">Join for free</a>
+            </p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #cbd5e1; font-size: 0.85rem;">
+        &copy; 2026 Ancestor Tree &bull; Private & Secure
+    </div>
+</div>
+
+<style>
+.auth-input {
+    width: 100%;
+    padding: 15px 18px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    outline: none;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    color: #1e293b;
+}
+.auth-input:focus {
+    border-color: #4f7942;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(79, 121, 66, 0.08);
+}
+.auth-input::placeholder {
+    color: #94a3b8;
+}
+</style>
+{% endblock %}

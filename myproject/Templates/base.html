@@ -6,53 +6,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ancestor Tree</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .standalone-mode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #fcfcfc;
+            padding: 20px;
+        }
+        .standalone-mode .content-area {
+            padding: 0;
+            width: 100%;
+            max-width: none;
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .nav-group-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #5c636a;
+            margin: 20px 0 10px 18px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+    </style>
 </head>
 <body>
-
-    <div class="main-wrapper" id="mainWrapper">
-        <!-- Click Outside Overlay -->
+    <div class="{% if user.is_authenticated %}main-wrapper{% else %}standalone-mode{% endif %}" id="mainWrapper">
+        {% if user.is_authenticated %}
         <div class="sidebar-overlay" onclick="closeSidebar()"></div>
-
-        <aside class="sidebar" id="sidebar">
+        
+        <aside class="sidebar" style="overflow-y: auto;">
             <div class="sidebar-header">
-                <h3>Ancestor <span>Tree</span></h3>
+                <h3>Ancestor<span>Tree</span></h3>
             </div>
             <nav class="sidebar-nav">
+                <a href="{% url 'home' %}" class="nav-item" onclick="closeSidebar()">
+                    <span class="icon">🏠</span> Dashboard
+                </a>
+
+                <div class="nav-group-title">Registration Steps</div>
                 <a href="{% url 'personal_info' %}" class="nav-item" onclick="closeSidebar()">
-                    <span class="icon">👤</span> Personal Information
+                    <span class="icon">👤</span> 1. Personal Info
                 </a>
                 <a href="{% url 'contact_info' %}" class="nav-item" onclick="closeSidebar()">
-                    <span class="icon">📞</span> Contact Information
+                    <span class="icon">📞</span> 2. Contact Details
                 </a>
                 <a href="{% url 'address_details' %}" class="nav-item" onclick="closeSidebar()">
-                    <span class="icon">📍</span> Address Details
+                    <span class="icon">📍</span> 3. Address Details
                 </a>
                 <a href="{% url 'bank_details' %}" class="nav-item" onclick="closeSidebar()">
-                    <span class="icon">🏦</span> Bank Details
+                    <span class="icon">🏦</span> 4. Bank Details
                 </a>
                 <a href="{% url 'upi_details' %}" class="nav-item" onclick="closeSidebar()">
-                    <span class="icon">💸</span> UPI Details
+                    <span class="icon">💸</span> 5. UPI Details
+                </a>
+                <a href="{% url 'identity_info' %}" class="nav-item" onclick="closeSidebar()">
+                    <span class="icon">🆔</span> 6. Identity Info
                 </a>
                 <a href="{% url 'nived_details' %}" class="nav-item" onclick="closeSidebar()">
-                    <span class="icon">🔱</span> Nived Details
+                    <span class="icon">🍽️</span> 7. Nived Details
                 </a>
                 <a href="{% url 'kuldevi_info' %}" class="nav-item" onclick="closeSidebar()">
-                    <span class="icon">🌸</span> Kuldevi Details
+                    <span class="icon">🔱</span> 8. Final & Link
+                </a>
+
+                <div class="nav-group-title">Family Records</div>
+                <a href="{% url 'members_list' %}" class="nav-item" onclick="closeSidebar()">
+                    <span class="icon">📊</span> Member Records
                 </a>
                 <a href="{% url 'family_tree' %}" class="nav-item" onclick="closeSidebar()">
                     <span class="icon">🌳</span> Family Tree
                 </a>
-                <div style="margin: 20px 0; border-top: 1px solid rgba(255,255,255,0.1);"></div>
-                <a href="{% url 'members_list' %}" class="nav-item" onclick="closeSidebar()" style="background: rgba(76, 175, 80, 0.1) !important;">
-                    <span class="icon">📊</span> View Records
-                </a>
-                <a href="{% url 'help' %}" class="nav-item" onclick="closeSidebar()">
-                    <span class="icon">❓</span> Help & Support
-                </a>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+                    <a href="{% url 'logout' %}" class="nav-item" onclick="closeSidebar()">
+                        <span class="icon">🚪</span> Logout
+                    </a>
+                </div>
             </nav>
         </aside>
+        {% endif %}
 
         <main class="content-area">
+            {% if user.is_authenticated %}
             <header class="header">
                 <div class="container navbar">
                     <div style="display: flex; align-items: center; gap: 15px;">
@@ -63,28 +104,32 @@
                         <a href="/">Home</a>
                         <a href="{% url 'members_list' %}">Records</a>
                         <a href="{% url 'family_tree' %}">Tree</a>
-                        <a href="{% url 'help' %}">Help</a>
-                        <a href="{% url 'contact' %}">Contact</a>
                         <a href="{% url 'personal_info' %}" class="cta-nav">Add Member</a>
-                        <a href="/about/">About</a>
+                        <a href="{% url 'logout' %}">Logout</a>
                     </nav>
                 </div>
             </header>
+            {% endif %}
 
             {% block content %}
             {% endblock %}
-            </main>
+        </main>
     </div>
 
     <script>
         function toggleSidebar() {
-            document.getElementById('mainWrapper').classList.toggle('sidebar-active');
+            const wrapper = document.getElementById('mainWrapper');
+            if(wrapper && wrapper.classList.contains('main-wrapper')) {
+                wrapper.classList.toggle('sidebar-active');
+            }
         }
         function closeSidebar() {
-            document.getElementById('mainWrapper').classList.remove('sidebar-active');
+            const wrapper = document.getElementById('mainWrapper');
+            if(wrapper && wrapper.classList.contains('main-wrapper')) {
+                wrapper.classList.remove('sidebar-active');
+            }
         }
 
-        // Highlight active nav item
         document.addEventListener('DOMContentLoaded', function() {
             const currentPath = window.location.pathname;
             const navItems = document.querySelectorAll('.nav-item');
