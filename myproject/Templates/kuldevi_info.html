@@ -69,32 +69,40 @@
 
 <!-- MODAL 2: VERIFICATION & LINKING -->
 <div id="familyLinkModal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 650px; text-align: left;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">Connect with Family</h2>
+    <div class="modal-content" style="max-width: 800px; text-align: left; height: 80vh; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0;">
+            <h2 style="margin: 0;">Select Family Member</h2>
             <button type="button" class="modal-btn btn-no" onclick="backToQuestion()" style="padding: 5px 12px; font-size: 0.8rem;">← Back</button>
         </div>
         
-        <div id="search_sub_section">
-            <p style="color: #7b6a58; margin-bottom: 20px;">Enter Aadhaar or Mobile to find your family member.</p>
-            <div class="form-grid">
-                <div>
-                    <label>Aadhaar Card Number</label>
-                    <input type="text" id="verify_aadhar" placeholder="12 digit Aadhaar" maxlength="12">
+        <div id="search_sub_section" style="flex-grow: 1; overflow-y: auto; padding-right: 10px;">
+            <p style="color: #7b6a58; margin-bottom: 20px;">Choose a family member from the list below to connect with.</p>
+            
+            <div class="member-selection-grid">
+                {% for m in all_members %}
+                <div class="selection-card" onclick="selectMember('{{ m.id }}', '{{ m.first_name }} {{ m.last_name }}', '{{ m.village }}', '{% if m.photo %}{{ m.photo.url }}{% endif %}', '{{ m.father.first_name|default:"-" }}', '{{ m.mother.first_name|default:"-" }}')">
+                    <div class="card-avatar">
+                        {% if m.photo %}
+                        <img src="{{ m.photo.url }}" alt="Photo">
+                        {% else %}
+                        <div class="avatar-placeholder">{{ m.first_name|slice:":1" }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-info">
+                        <h3>{{ m.first_name }} {{ m.last_name }}</h3>
+                        <p>📍 {{ m.village }}</p>
+                    </div>
                 </div>
-                <div>
-                    <label>Mobile Number</label>
-                    <input type="text" id="verify_mobile" placeholder="10 digit Mobile" maxlength="10">
+                {% empty %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #7b6a58;">
+                    No other members found. You can add them later or continue.
                 </div>
-            </div>
-            <div id="search-error" style="color: #e53935; font-size: 0.85rem; margin-top: 15px; display: none; font-weight: 600;"></div>
-            <div style="margin-top: 25px; text-align: center;">
-                <button type="button" class="submit-btn" onclick="verifyAndSearch(this)">Find Family Member</button>
+                {% endfor %}
             </div>
         </div>
 
-        <div id="match_result_section" style="display: none; margin-top: 10px;">
-            <div id="member_preview" style="background: #f8fcf8; padding: 25px; border-radius: 20px; border: 1px solid #e0f0e0; margin-bottom: 25px;"></div>
+        <div id="match_result_section" style="display: none; margin-top: 10px; flex-shrink: 0;">
+            <div id="member_preview" style="background: #f8fcf8; padding: 20px; border-radius: 15px; border: 1px solid #e0f0e0; margin-bottom: 20px;"></div>
             
             <div class="form-grid">
                 <div>
@@ -119,9 +127,9 @@
                     </select>
                 </div>
             </div>
-            <div class="modal-btns" style="margin-top: 30px; justify-content: flex-start;">
+            <div class="modal-btns" style="margin-top: 25px; justify-content: flex-start;">
                 <button type="button" class="modal-btn btn-yes" onclick="linkWithMember(this)">Link & Generate Tree</button>
-                <button type="button" class="modal-btn btn-no" onclick="backToSearch()">← Try Another Search</button>
+                <button type="button" class="modal-btn btn-no" onclick="backToSearch()">← Select Different Member</button>
             </div>
         </div>
     </div>
@@ -144,47 +152,26 @@ function closeModals() {
     document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
 }
 
-async function verifyAndSearch(btn) {
-    const aadhar = document.getElementById('verify_aadhar').value.trim();
-    const mobile = document.getElementById('verify_mobile').value.trim();
-    const errorDiv = document.getElementById('search-error');
-    errorDiv.style.display = 'none';
+function selectMember(id, name, village, photoUrl, fatherName, motherName) {
+    let avatar = photoUrl 
+        ? `<img src="${photoUrl}" style="width: 60px; height: 60px; border-radius: 15px; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">`
+        : `<div style="width: 60px; height: 60px; background: #4f7942; color: white; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.5rem;">${name.charAt(0)}</div>`;
 
-    if (!aadhar && !mobile) { alert("Please enter Aadhaar or Mobile."); return; }
+    document.getElementById('member_preview').innerHTML = `
+        <div style="display: flex; gap: 15px; align-items: center;">
+            ${avatar}
+            <div>
+                <h4 style="margin: 0; color: #1a4d2e; font-size: 1.1rem;">${name}</h4>
+                <p style="margin: 2px 0; color: #4f7942; font-weight: 600; font-size: 0.8rem;">📍 Village: ${village}</p>
+                <div style="display: flex; gap: 8px; margin-top: 5px;">
+                    <span style="background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;">👨 Father: ${fatherName}</span>
+                    <span style="background: #fce4ec; color: #c2185b; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;">👩 Mother: ${motherName}</span>
+                </div>
+            </div>
+        </div><input type="hidden" id="found_member_id" value="${id}">`;
     
-    const orig = btn.innerText;
-    btn.disabled = true; btn.innerText = "Searching Database...";
-    
-    try {
-        const response = await fetch(`/search-family-member/?aadhar=${encodeURIComponent(aadhar)}&mobile=${encodeURIComponent(mobile)}`);
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-            const m = data.member;
-            let avatar = m.photo_url 
-                ? `<img src="${m.photo_url}" style="width: 70px; height: 70px; border-radius: 20px; object-fit: cover; border: 3px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">`
-                : `<div style="width: 70px; height: 70px; background: #4f7942; color: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 2rem;">${m.name.charAt(0)}</div>`;
-
-            document.getElementById('member_preview').innerHTML = `
-                <div style="display: flex; gap: 20px; align-items: center;">
-                    ${avatar}
-                    <div>
-                        <h4 style="margin: 0; color: #1a4d2e; font-size: 1.3rem;">${m.name}</h4>
-                        <p style="margin: 5px 0; color: #4f7942; font-weight: 600; font-size: 0.9rem;">📍 Village: ${m.village}</p>
-                        <div style="display: flex; gap: 10px; margin-top: 8px;">
-                            <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem;">👨 Father: ${m.father_name}</span>
-                            <span style="background: #fce4ec; color: #c2185b; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem;">👩 Mother: ${m.mother_name}</span>
-                        </div>
-                    </div>
-                </div><input type="hidden" id="found_member_id" value="${m.id}">`;
-            document.getElementById('search_sub_section').style.display = 'none';
-            document.getElementById('match_result_section').style.display = 'block';
-        } else {
-            errorDiv.innerText = "⚠️ " + (data.message || "No matching family member found.");
-            errorDiv.style.display = 'block';
-        }
-    } catch (e) { alert("System communication error."); }
-    finally { btn.disabled = false; btn.innerText = orig; }
+    document.getElementById('search_sub_section').style.display = 'none';
+    document.getElementById('match_result_section').style.display = 'block';
 }
 
 async function linkWithMember(btn) {
@@ -233,10 +220,67 @@ function addMoreDeity() {
 </script>
 
 <style>
+.member-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    padding-bottom: 20px;
+}
+.selection-card {
+    background: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.selection-card:hover {
+    border-color: #4f7942;
+    background: #f8faf8;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.card-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    overflow: hidden;
+    background: #f1f1f1;
+}
+.card-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #4f7942;
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+.card-info h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #1a4d2e;
+}
+.card-info p {
+    margin: 5px 0 0;
+    font-size: 0.75rem;
+    color: #7b6a58;
+}
+
 .cta-primary { background: #1a4d2e; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
 .cta-primary:hover { background: #143d24; transform: translateY(-2px); }
 .cta-secondary { background: white; color: #1a4d2e; border: 1.5px solid #1a4d2e; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
 .cta-secondary:hover { background: #f1f8e9; }
 .remove-row-btn { background: #ffebee; color: #e53935; border: 1px solid #ffcdd2; border-radius: 8px; cursor: pointer; font-weight: 700; width: 45px; }
 </style>
+
 {% endblock %}

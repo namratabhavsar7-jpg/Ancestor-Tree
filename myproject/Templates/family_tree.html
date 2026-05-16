@@ -3,55 +3,28 @@
 
 {% block content %}
 <section class="form-section">
-    <div class="container">
-        <div class="section-heading">
-            <h1>Hierarchical Family Tree</h1>
-            <p>Explore your family legacy across generations.</p>
+    <div class="container" style="max-width: 1400px;">
+        <div class="section-heading" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1>Family Tree</h1>
+                <p>Explore your family legacy across generations.</p>
+            </div>
         </div>
 
         {% for fid, members in families.items %}
-        <div class="form-card" style="margin-bottom: 50px;">
-            <div class="form-title" style="display: flex; justify-content: space-between; align-items: center;">
-                <span>Family ID: {{ fid }}</span>
-                <span style="font-size: 0.9rem; font-weight: normal; color: #7b6a58;">{{ members|length }} Members</span>
+        <div class="tree-card-wrapper" style="margin-bottom: 50px;">
+            <div class="tree-header">
+                <h3>Family Group: {{ fid }}</h3>
+                <span class="member-count">{{ members|length }} Members Connected</span>
             </div>
             
             <div class="tree-container">
                 <div class="tree">
-                    <ul>
+                    <ul id="tree-root-{{ fid }}">
                         {% for m in members %}
                             {% if not m.father and not m.mother %}
-                                <!-- Start with Root Members (e.g. Grandfathers) -->
-                                <li>
-                                    <div class="member-card root-node">
-                                        <a href="{% url 'member_detail' m.pk %}" style="text-decoration: none; color: inherit;">
-                                            <div class="m-avatar">
-                                                {% if m.photo %}
-                                                    <img src="{{ m.photo.url }}">
-                                                {% else %}
-                                                    <span>{{ m.first_name|first }}{{ m.last_name|first }}</span>
-                                                {% endif %}
-                                            </div>
-                                            <div class="m-info">
-                                                <p class="m-name">{{ m.first_name }} {{ m.last_name }}</p>
-                                                <p class="m-relation">{{ m.relationship_title|default:"Root Member" }}</p>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    
-                                    {% if m.children_as_father.all or m.children_as_mother.all %}
-                                        <ul>
-                                            {% for child in m.children_as_father.all %}
-                                                {% include "tree_node.html" with m=child %}
-                                            {% endfor %}
-                                            {% for child in m.children_as_mother.all %}
-                                                {% if not child.father %}
-                                                    {% include "tree_node.html" with m=child %}
-                                                {% endif %}
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                </li>
+                                <!-- Start with Root Members (Founders) -->
+                                {% include "tree_node.html" with m=m %}
                             {% endif %}
                         {% endfor %}
                     </ul>
@@ -66,24 +39,116 @@
     </div>
 </section>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Interactive highlighting logic
+    const cards = document.querySelectorAll('.member-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Remove previous active states
+            document.querySelectorAll('.member-card').forEach(c => c.classList.remove('active', 'dimmed'));
+            document.querySelectorAll('.tree li::before, .tree li::after, .tree ul ul::before').forEach(line => line.classList.remove('active-line'));
+            
+            // Find all relatives in the same branch
+            const parentLi = this.closest('li');
+            const allRelatives = parentLi.querySelectorAll('.member-card');
+            
+            // Highlight ancestors (simplified: highlight parents up the chain)
+            let current = parentLi;
+            const ancestors = [];
+            while(current && current.tagName === 'LI') {
+                const card = current.querySelector('.member-card');
+                if(card) ancestors.push(card);
+                current = current.parentElement.closest('li');
+            }
+
+            // Apply dimmed state to everyone else
+            document.querySelectorAll('.member-card').forEach(c => c.classList.add('dimmed'));
+            
+            // Highlight this node and its descendants/ancestors
+            allRelatives.forEach(c => {
+                c.classList.remove('dimmed');
+                c.classList.add('active');
+            });
+            ancestors.forEach(c => {
+                c.classList.remove('dimmed');
+                c.classList.add('active');
+            });
+            
+            this.classList.add('active');
+            e.stopPropagation();
+        });
+    });
+
+    // Reset on background click
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.member-card').forEach(c => c.classList.remove('active', 'dimmed'));
+    });
+});
+</script>
+
 <style>
+.tree-card-wrapper {
+    background: white;
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid #eef2f6;
+}
+.tree-header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f8fafc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.tree-header h3 { color: #1a4d2e; margin: 0; font-size: 1.25rem; }
+.member-count { background: #e8f5e9; color: #2e7d32; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; }
+
 .tree-container { overflow-x: auto; padding: 40px 0; text-align: center; }
 .tree ul { padding-top: 20px; position: relative; transition: all 0.5s; display: flex; justify-content: center; }
 .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 5px 0 5px; transition: all 0.5s; }
-.tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid #ccc; width: 50%; height: 20px; }
-.tree li::after { right: auto; left: 50%; border-left: 2px solid #ccc; }
+.tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid #cbd5e1; width: 50%; height: 20px; }
+.tree li::after { right: auto; left: 50%; border-left: 2px solid #cbd5e1; }
 .tree li:only-child::after, .tree li:only-child::before { display: none; }
 .tree li:only-child { padding-top: 0; }
 .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
-.tree li:last-child::before { border-right: 2px solid #ccc; border-radius: 0 5px 0 0; }
+.tree li:last-child::before { border-right: 2px solid #cbd5e1; border-radius: 0 5px 0 0; }
 .tree li:first-child::after { border-radius: 5px 0 0 0; }
-.tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid #ccc; width: 0; height: 20px; }
-.member-card { display: inline-block; padding: 15px; background: white; border: 2px solid #edf5ea; border-radius: 18px; min-width: 180px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; position: relative; z-index: 10; }
-.member-card:hover { border-color: #4f7942; transform: translateY(-5px); box-shadow: 0 10px 25px rgba(79, 121, 66, 0.15); }
-.root-node { background: #f1f8e9; border-color: #c5e1a5; }
-.m-avatar { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 10px auto; background: #4f7942; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; overflow: hidden; }
+.tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid #cbd5e1; width: 0; height: 20px; }
+
+/* Active States */
+.member-card.active { border-color: #4f7942; box-shadow: 0 10px 25px rgba(79, 121, 66, 0.2); transform: translateY(-5px); z-index: 100; }
+.member-card.dimmed { opacity: 0.3; filter: grayscale(0.5); }
+
+.member-card { 
+    display: inline-block; 
+    padding: 15px; 
+    background: white; 
+    border: 2px solid #e2e8f0; 
+    border-radius: 18px; 
+    min-width: 180px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+    transition: 0.3s; 
+    position: relative; 
+    z-index: 10; 
+    cursor: pointer;
+}
+.member-card:hover { border-color: #1a4d2e; transform: translateY(-5px); }
+.m-avatar { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 10px auto; background: #f1f5f9; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
 .m-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.m-name { margin: 0; font-weight: 700; color: #1a4d2e; font-size: 0.95rem; }
-.m-relation { margin: 3px 0 0 0; font-size: 0.75rem; color: #7b6a58; text-transform: uppercase; letter-spacing: 0.5px; }
+.m-name { margin: 0; font-weight: 700; color: #1e293b; font-size: 0.95rem; }
+.m-relation { margin: 3px 0 0 0; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
+.m-id { display: block; font-size: 9px; color: #4f7942; font-weight: 800; margin-top: 5px; }
+
+@media (max-width: 768px) {
+    .member-card { min-width: 140px; padding: 10px; border-radius: 12px; }
+    .m-avatar { width: 35px; height: 35px; margin-bottom: 5px; }
+    .m-name { font-size: 0.8rem; }
+    .m-relation { font-size: 0.65rem; }
+    .tree li { padding: 15px 2px 0 2px; }
+}
 </style>
 {% endblock %}

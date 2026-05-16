@@ -13,12 +13,12 @@
             align-items: center;
             min-height: 100vh;
             background: #fcfcfc;
-            padding: 20px;
         }
         .standalone-mode .content-area {
             padding: 0;
             width: 100%;
             max-width: none;
+            height: 100vh;
         }
         .sidebar-nav {
             display: flex;
@@ -36,8 +36,7 @@
     </style>
 </head>
 <body>
-    <div class="{% if user.is_authenticated %}main-wrapper{% else %}standalone-mode{% endif %}" id="mainWrapper">
-        {% if user.is_authenticated %}
+    <div class="{% if user.is_authenticated %}main-wrapper{% else %}main-wrapper standalone-mode{% endif %}" id="mainWrapper">
         <div class="sidebar-overlay" onclick="closeSidebar()"></div>
         
         <aside class="sidebar" style="overflow-y: auto;">
@@ -49,31 +48,33 @@
                     <span class="icon">🏠</span> Dashboard
                 </a>
 
+                {% if user.is_authenticated %}
                 <div class="nav-group-title">Registration Steps</div>
-                <a href="{% url 'personal_info' %}" class="nav-item" onclick="closeSidebar()">
+                <a href="{% url 'personal_info' %}?section=1" class="nav-item" data-section="1" onclick="closeSidebar()">
                     <span class="icon">👤</span> 1. Personal Info
                 </a>
-                <a href="{% url 'contact_info' %}" class="nav-item" onclick="closeSidebar()">
+                <a href="{% url 'personal_info' %}?section=2" class="nav-item" data-section="2" onclick="closeSidebar()">
                     <span class="icon">📞</span> 2. Contact Details
                 </a>
-                <a href="{% url 'address_details' %}" class="nav-item" onclick="closeSidebar()">
+                <a href="{% url 'personal_info' %}?section=3" class="nav-item" data-section="3" onclick="closeSidebar()">
                     <span class="icon">📍</span> 3. Address Details
                 </a>
-                <a href="{% url 'bank_details' %}" class="nav-item" onclick="closeSidebar()">
+                <a href="{% url 'personal_info' %}?section=4" class="nav-item" data-section="4" onclick="closeSidebar()">
                     <span class="icon">🏦</span> 4. Bank Details
                 </a>
-                <a href="{% url 'upi_details' %}" class="nav-item" onclick="closeSidebar()">
+                <a href="{% url 'personal_info' %}?section=5" class="nav-item" data-section="5" onclick="closeSidebar()">
                     <span class="icon">💸</span> 5. UPI Details
                 </a>
-                <a href="{% url 'identity_info' %}" class="nav-item" onclick="closeSidebar()">
+                <a href="{% url 'personal_info' %}?section=6" class="nav-item" data-section="6" onclick="closeSidebar()">
                     <span class="icon">🆔</span> 6. Identity Info
                 </a>
-                <a href="{% url 'nived_details' %}" class="nav-item" onclick="closeSidebar()">
+                <a href="{% url 'personal_info' %}?section=7" class="nav-item" data-section="7" onclick="closeSidebar()">
                     <span class="icon">🍽️</span> 7. Nived Details
                 </a>
-                <a href="{% url 'kuldevi_info' %}" class="nav-item" onclick="closeSidebar()">
+                <a href="{% url 'personal_info' %}?section=8" class="nav-item" data-section="8" onclick="closeSidebar()">
                     <span class="icon">🔱</span> 8. Final & Link
                 </a>
+                {% endif %}
 
                 <div class="nav-group-title">Family Records</div>
                 <a href="{% url 'members_list' %}" class="nav-item" onclick="closeSidebar()">
@@ -84,16 +85,24 @@
                 </a>
                 
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+                    {% if user.is_authenticated %}
                     <a href="{% url 'logout' %}" class="nav-item" onclick="closeSidebar()">
                         <span class="icon">🚪</span> Logout
                     </a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="nav-item" onclick="closeSidebar()">
+                        <span class="icon">🔑</span> Login
+                    </a>
+                    <a href="{% url 'register' %}" class="nav-item" onclick="closeSidebar()">
+                        <span class="icon">📝</span> Register
+                    </a>
+                    {% endif %}
                 </div>
             </nav>
         </aside>
-        {% endif %}
 
         <main class="content-area">
-            {% if user.is_authenticated %}
+            <!-- ================= GLOBAL HEADER ================= -->
             <header class="header">
                 <div class="container navbar">
                     <div style="display: flex; align-items: center; gap: 15px;">
@@ -104,17 +113,74 @@
                         <a href="/">Home</a>
                         <a href="{% url 'members_list' %}">Records</a>
                         <a href="{% url 'family_tree' %}">Tree</a>
+                        {% if user.is_authenticated %}
                         <a href="{% url 'personal_info' %}" class="cta-nav">Add Member</a>
                         <a href="{% url 'logout' %}">Logout</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" style="font-weight: 600;">Login</a>
+                        <a href="{% url 'register' %}" class="cta-nav">Register</a>
+                        {% endif %}
                     </nav>
                 </div>
             </header>
-            {% endif %}
 
             {% block content %}
             {% endblock %}
+
+            <!-- ================= FOOTER ================= -->
+            <footer class="footer">
+                <div class="container">
+                    <div class="footer-grid">
+                        <div class="footer-logo">
+                            <h3>Ancestor<span>Tree</span></h3>
+                            <p>Preserving family legacies through modern technology. Join thousands of families in documenting their history for future generations.</p>
+                        </div>
+                        <div class="footer-links">
+                            <h4>Platform</h4>
+                            <ul>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="{% url 'about' %}">About Us</a></li>
+                                <li><a href="{% url 'contact' %}">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <h4>Support</h4>
+                            <ul>
+                                <li><a href="{% url 'help' %}">Help Center</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a href="#">Terms of Service</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-newsletter">
+                            <h4>Stay Connected</h4>
+                            <p>Get updates on new features and heritage preservation tips.</p>
+                            <div class="newsletter-box">
+                                <input type="email" placeholder="Your email address">
+                                <button class="cta-primary" style="padding: 10px 15px; border-radius: 8px; border:none; cursor:pointer;">Join</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p>&copy; 2026 Ancestor Tree. All rights reserved.</p>
+                        <div style="display: flex; gap: 20px;">
+                            <a href="#" style="color: #64748b; text-decoration:none;">Twitter</a>
+                            <a href="#" style="color: #64748b; text-decoration:none;">LinkedIn</a>
+                            <a href="#" style="color: #64748b; text-decoration:none;">Facebook</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </main>
     </div>
+
+    {% if not user.is_authenticated %}
+    <style>
+        .header { background: #ffffff !important; box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important; }
+        .logo { color: #1a4d2e !important; }
+        .nav-links a { color: #475569 !important; font-weight: 500; }
+        .nav-links a:hover { color: #1a4d2e !important; }
+    </style>
+    {% endif %}
 
     <script>
         function toggleSidebar() {
@@ -137,8 +203,31 @@
                 if (item.getAttribute('href') === currentPath) {
                     item.classList.add('active');
                 }
+
+                // Smooth scroll or Tab switch for sections if they exist on the current page
+                item.addEventListener('click', function(e) {
+                    const sectionId = this.getAttribute('data-section');
+                    if (sectionId) {
+                        // Priority 1: Tab switch (if switchSection exists)
+                        if (typeof window.switchSection === 'function') {
+                            e.preventDefault();
+                            window.switchSection(sectionId);
+                            closeSidebar();
+                        } 
+                        // Priority 2: Smooth scroll (fallback)
+                        else {
+                            const targetSection = document.getElementById('section-' + sectionId);
+                            if (targetSection) {
+                                e.preventDefault();
+                                targetSection.scrollIntoView({ behavior: 'smooth' });
+                                closeSidebar();
+                            }
+                        }
+                    }
+                });
             });
         });
     </script>
+    {% block extra_body %}{% endblock %}
 </body>
 </html>

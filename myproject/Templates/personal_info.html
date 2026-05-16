@@ -3,103 +3,500 @@
 
 {% block content %}
 <section class="form-section">
-    <div class="container">
+    <div class="container" style="max-width: 1000px;">
         <div class="section-heading">
-            <h1>Personal Information</h1>
+            <h1>Register New Member</h1>
         </div>
 
-        {% if success %}
-        <div class="success-message">
-            Personal details submitted successfully 🎉
-        </div>
-        {% endif %}
-
-        <form method="POST" id="personalInfoForm" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" id="addMemberForm" novalidate>
             {% csrf_token %}
 
-            <div class="form-card">
-                <div class="form-title">Basic Details</div>
-                <div class="form-grid">
-                    <div class="full-name-group">
-                        <label>Full Name</label>
-                        <div class="name-fields">
-                            <input type="text" name="first_name" placeholder="First Name" required>
-                            <input type="text" name="middle_name" placeholder="Middle Name">
-                            <input type="text" name="last_name" placeholder="Last Name" required>
+            <!-- SECTION 1: PERSONAL INFO -->
+            <div class="section-content" id="section-1">
+                <div class="form-card">
+                    <div class="form-title">1. Personal Information</div>
+                    <div class="form-grid">
+                        <div class="full-name-group">
+                            <label>Full Name</label>
+                            <div class="name-fields">
+                                <input type="text" name="first_name" placeholder="First Name" required>
+                                <input type="text" name="middle_name" placeholder="Middle Name">
+                                <input type="text" name="last_name" placeholder="Last Name" required>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="gender-container">
-                        <label>Gender</label>
-                        <div style="position: relative;">
-                            <input type="text" id="genderDisplay" readonly placeholder="Select Gender" required style="background: #fafafa; cursor: pointer;">
-                            <select name="gender" id="genderSelect" onchange="handleGenderChange()" required style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
-                                <option value="" disabled selected hidden>Select Gender</option>
+                        <div><label>Date of Birth</label><input type="date" name="date_of_birth" onchange="calculateAge(this.value)"></div>
+                        <div><label>Age</label><input type="number" name="age" id="age_input" placeholder="Age"></div>
+                        <div>
+                            <label>Gender</label>
+                            <select name="gender" id="genderSelect" onchange="handleGenderChange()" required>
+                                <option value="" disabled selected>Select Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div id="other_gender_div" style="display:none;">
-                        <label>Specify Gender</label>
-                        <input type="text" name="other_gender" id="other_gender_input" placeholder="Please specify gender">
-                    </div>
-
-                    <div>
-                        <label>Religion</label>
-                        <select name="religion" required>
-                            <option value="Hindu">Hindu</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label>Nationality</label>
-                        <select name="nationality" required>
-                            <option value="Indian">Indian</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label>Height (cm)</label>
-                        <input type="number" step="0.01" name="height" placeholder="Height (cm)">
-                    </div>
-
-                    <div>
-                        <label>Weight (kg)</label>
-                        <input type="number" step="0.01" name="weight" placeholder="Weight (kg)">
-                    </div>
-                    
-                    <div>
-                        <label>Profile Photo</label>
-                        <input type="file" name="photo" style="padding: 11px 18px;">
+                        <div id="other_gender_div" style="display: none;"><label>Specify Gender</label><input type="text" name="other_gender" placeholder="Specify"></div>
+                        <div><label>Is Alive?</label><select name="is_alive"><option value="True" selected>Yes</option><option value="False">No</option></select></div>
+                        <div><label>Religion</label><input type="text" name="religion" value="Hindu"></div>
+                        <div><label>Nationality</label><input type="text" name="nationality" value="Indian"></div>
+                        <div style="grid-column: 1 / -1;"><label>Profile Photo</label><input type="file" name="photo"></div>
                     </div>
                 </div>
+                <div class="form-card" style="margin-top: 20px;">
+                    <div class="form-title">Parents Details</div>
+                    <div class="form-grid">
+                        <div class="full-name-group">
+                            <label>Father's Name</label>
+                            <div class="name-fields">
+                                <input type="text" name="father_first_name" placeholder="First"><input type="text" name="father_middle_name" placeholder="Middle"><input type="text" name="father_last_name" placeholder="Last">
+                            </div>
+                        </div>
+                        <div class="full-name-group" style="margin-top: 15px;">
+                            <label>Mother's Name</label>
+                            <div class="name-fields">
+                                <input type="text" name="mother_first_name" placeholder="First"><input type="text" name="mother_middle_name" placeholder="Middle"><input type="text" name="mother_last_name" placeholder="Last">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="submit-area" style="text-align: right;"><button type="button" class="submit-btn" onclick="window.switchSection(2)">Next: Contact →</button></div>
             </div>
 
-            <div class="submit-area">
-                <button type="submit" class="submit-btn">Submit </button>
+            <!-- SECTION 2: CONTACT DETAILS -->
+            <div class="section-content" id="section-2" style="display: none;">
+                <div class="form-card">
+                    <div class="form-title">2. Contact Details</div>
+                    <div class="form-grid">
+                        <div><label>Primary Mobile</label><input type="text" name="contact_number_1"></div>
+                        <div><label>Secondary Mobile</label><input type="text" name="contact_number_2"></div>
+                        <div><label>WhatsApp Number</label><input type="text" name="whatsapp_number"></div>
+                        <div><label>Email Address</label><input type="email" name="email"></div>
+                    </div>
+                </div>
+                <div class="submit-area" style="display: flex; justify-content: space-between;"><button type="button" class="submit-btn" style="background: #7b6a58;" onclick="window.switchSection(1)">← Back</button><button type="button" class="submit-btn" onclick="window.switchSection(3)">Next: Address →</button></div>
+            </div>
+
+            <!-- SECTION 3: ADDRESS DETAILS -->
+            <div class="section-content" id="section-3" style="display: none;">
+                <div class="form-card">
+                    <div class="form-title">3. Address Details</div>
+                    <div class="form-grid" style="margin-bottom: 20px;">
+                        <div>
+                            <label>State</label>
+                            <select name="state" id="state" required style="width: 100%;">
+                                <option value="">-- Select State --</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div id="state-warning" style="color: #d9534f; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">⚠️ Select State first</div>
+                            <label id="type-label" style="display: none;">Address Type</label>
+                            <select name="address_type" id="address_type" required disabled style="width: 100%;">
+                                <option value="">-- Select City/Village --</option>
+                                <option value="City">City</option>
+                                <option value="Village">Village</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="city_fields" style="display: none;">
+                        <div class="form-grid">
+                            <div><label>Block Number</label><input type="text" name="block_number" placeholder="Enter Block No."></div>
+                            <div><label>Society Name</label><input type="text" name="society" placeholder="Enter Society"></div>
+                            <div><label>Landmark</label><input type="text" name="landmark" placeholder="Enter Landmark"></div>
+                            <div><label>Area / Street</label><input type="text" name="area" placeholder="Enter Area"></div>
+                            <div><label>Pincode</label><input type="text" name="pincode" id="city_pincode" placeholder="Pincode"></div>
+                        </div>
+                    </div>
+
+                    <div id="village_fields" style="display: none;">
+                        <div class="form-grid">
+                            <div><label>District</label><select name="district" id="district"><option value="">-- Select District --</option></select></div>
+                            <div>
+                                <div id="district-warning" style="color: #d9534f; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">⚠️ Select District first</div>
+                                <label id="taluka-label" style="display: none;">Taluka</label>
+                                <select name="taluka" id="taluka" disabled><option value="">-- Select Taluka --</option></select>
+                            </div>
+                            <div>
+                                <div id="taluka-warning" style="color: #d9534f; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">⚠️ Select Taluka first</div>
+                                <label id="village-label" style="display: none;">Village</label>
+                                <select name="village" id="village" disabled><option value="">-- Select Village --</option></select>
+                            </div>
+                            <div><label>Area / Street</label><input type="text" name="area_village" placeholder="Enter Area"></div>
+                            <div><label>Pincode</label><input type="text" name="pincode_village" id="village_pincode" placeholder="Pincode" readonly></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="submit-area" style="display: flex; justify-content: space-between;"><button type="button" class="submit-btn" style="background: #7b6a58;" onclick="window.switchSection(2)">← Back</button><button type="button" class="submit-btn" onclick="window.switchSection(4)">Next: Bank →</button></div>
+            </div>
+
+            <!-- SECTION 4: BANK DETAILS -->
+            <div class="section-content" id="section-4" style="display: none;">
+                <div class="form-card">
+                    <div class="form-title">4. Bank Details</div>
+                    <div class="form-grid">
+                        <div><label>Occupation</label><input type="text" name="occupation"></div>
+                        <div><label>Job Type</label><input type="text" name="job_type"></div>
+                        <div><label>Monthly Income</label><input type="number" name="monthly_income"></div>
+                        <div><label>Bank Name</label><input type="text" name="bank_name"></div>
+                        <div><label>Account Holder</label><input type="text" name="account_holder_name"></div>
+                        <div><label>Account Number</label><input type="text" name="account_number"></div>
+                        <div><label>IFSC Code</label><input type="text" name="ifsc_code"></div>
+                        <div><label>Branch Name</label><input type="text" name="branch_name"></div>
+                    </div>
+                </div>
+                <div class="submit-area" style="display: flex; justify-content: space-between;"><button type="button" class="submit-btn" style="background: #7b6a58;" onclick="window.switchSection(3)">← Back</button><button type="button" class="submit-btn" onclick="window.switchSection(5)">Next: UPI →</button></div>
+            </div>
+
+            <!-- SECTION 5: UPI DETAILS -->
+            <div class="section-content" id="section-5" style="display: none;">
+                <div class="form-card">
+                    <div class="form-title">5. UPI Details</div>
+                    <div class="form-grid">
+                        <div><label>UPI ID</label><input type="text" name="upi_id" placeholder="example@upi"></div>
+                        <div><label>UPI Display Name</label><input type="text" name="upi_name"></div>
+                    </div>
+                </div>
+                <div class="submit-area" style="display: flex; justify-content: space-between;"><button type="button" class="submit-btn" style="background: #7b6a58;" onclick="window.switchSection(4)">← Back</button><button type="button" class="submit-btn" onclick="window.switchSection(6)">Next: Identity →</button></div>
+            </div>
+
+            <!-- SECTION 6: IDENTITY INFO -->
+            <div class="section-content" id="section-6" style="display: none;">
+                <div class="form-card">
+                    <div class="form-title">6. Identity Info</div>
+                    <div class="form-grid">
+                        <div><label>Aadhaar Number</label><input type="text" name="aadhar"></div>
+                        <div><label>PAN Card Number</label><input type="text" name="pan"></div>
+                    </div>
+                </div>
+                <div class="submit-area" style="display: flex; justify-content: space-between;"><button type="button" class="submit-btn" style="background: #7b6a58;" onclick="window.switchSection(5)">← Back</button><button type="button" class="submit-btn" onclick="window.switchSection(7)">Next: Nived →</button></div>
+            </div>
+
+            <!-- SECTION 7: NIVED DETAILS -->
+            <div class="section-content" id="section-7" style="display: none;">
+                <div class="form-card">
+                    <div class="form-title">7. Nived Details</div>
+                    <div id="nived-container">
+                        <div class="dynamic-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" name="food_name" placeholder="Food Name">
+                        </div>
+                    </div>
+                    <button type="button" class="add-more-btn" onclick="addNivedRow()">+ Add More Food</button>
+                </div>
+                <div class="submit-area" style="display: flex; justify-content: space-between;"><button type="button" class="submit-btn" style="background: #7b6a58;" onclick="window.switchSection(6)">← Back</button><button type="button" class="submit-btn" onclick="window.switchSection(8)">Next: Heritage →</button></div>
+            </div>
+
+            <!-- SECTION 8: HERITAGE & LINK -->
+            <div class="section-content" id="section-8" style="display: none;">
+                <div class="form-card">
+                    <div class="form-title">8. Heritage & Final Details</div>
+                    <div class="form-grid">
+                        <div><label>Goatra</label><input type="text" name="goatra"></div>
+                        <div style="grid-column: 1/-1;">
+                            <label>Family Deity Details</label>
+                            <div id="deity-container">
+                                <div class="dynamic-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                    <select name="dev_type" style="width: 120px;">
+                                        <option value="Kuldevi">Kuldevi</option>
+                                        <option value="Kuldev">Kuldev</option>
+                                    </select>
+                                    <input type="text" name="dev_name" placeholder="Deity Name">
+                                </div>
+                            </div>
+                            <button type="button" class="add-more-btn" onclick="addDeityRow()">+ Add More Deity</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="submit-area" style="display: flex; gap: 20px; justify-content: center;"><button type="button" class="submit-btn" style="background: #7b6a58;" onclick="window.switchSection(7)">← Back</button><button type="submit" class="submit-btn">Finish: Register Member ✓</button></div>
             </div>
         </form>
     </div>
 </section>
 
+<script src="{% static 'js/address_logic.js' %}"></script>
 <script>
-    function handleGenderChange() {
-        const genderSelect = document.getElementById('genderSelect');
-        const genderDisplay = document.getElementById('genderDisplay');
-        const otherGenderInput = document.getElementById('other_gender_input');
-        
-        genderDisplay.value = genderSelect.value;
-        
-        if (genderSelect.value === 'Other') {
-            otherGenderInput.style.display = 'block';
-            otherGenderInput.required = true;
-        } else {
-            otherGenderInput.style.display = 'none';
-            otherGenderInput.required = false;
-        }
+window.switchSection = function(sectionId) {
+    document.querySelectorAll('.section-content').forEach(s => s.style.display = 'none');
+    const target = document.getElementById('section-' + sectionId);
+    if (target) {
+        target.style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.querySelectorAll('.sidebar .nav-item').forEach(link => {
+            if (link.getAttribute('data-section') == sectionId) link.classList.add('active');
+            else if (link.getAttribute('data-section')) link.classList.remove('active');
+        });
     }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let section = urlParams.get('section');
+    
+    // If success is true (modal is showing), default to section 8 background
+    if (urlParams.get('success') === 'true' && !section) {
+        section = 8;
+    } else if (!section) {
+        section = 1;
+    }
+    
+    window.switchSection(section);
+});
+
+function handleGenderChange() { document.getElementById('other_gender_div').style.display = document.getElementById('genderSelect').value === 'Other' ? 'block' : 'none'; }
+function calculateAge(dob) { if (!dob) return; const birthDate = new Date(dob); const today = new Date(); let age = today.getFullYear() - birthDate.getFullYear(); const m = today.getMonth() - birthDate.getMonth(); if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--; document.getElementById('age_input').value = age; }
+function addNivedRow() { const div = document.createElement('div'); div.className = 'dynamic-row'; div.style = 'display: flex; gap: 10px; margin-bottom: 10px;'; div.innerHTML = `<input type="text" name="food_name" placeholder="Food Name"><button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">✕</button>`; document.getElementById('nived-container').appendChild(div); }
+function addDeityRow() { const div = document.createElement('div'); div.className = 'dynamic-row'; div.style = 'display: flex; gap: 10px; margin-bottom: 10px;'; div.innerHTML = `<select name="dev_type" style="width: 120px;"><option value="Kuldevi">Kuldevi</option><option value="Kuldev">Kuldev</option></select><input type="text" name="dev_name" placeholder="Name"><button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">✕</button>`; document.getElementById('deity-container').appendChild(div); }
+
+// Validation jump logic
+document.getElementById('addMemberForm').addEventListener('submit', function(e) {
+    const sections = document.querySelectorAll('.section-content');
+    let firstErrorSection = null;
+
+    for (let section of sections) {
+        const inputs = section.querySelectorAll('input[required], select[required]');
+        for (let input of inputs) {
+            if (!input.checkValidity()) {
+                firstErrorSection = section.id.replace('section-', '');
+                break;
+            }
+        }
+        if (firstErrorSection) break;
+    }
+
+    if (firstErrorSection) {
+        e.preventDefault();
+        window.switchSection(firstErrorSection);
+        setTimeout(() => {
+            document.getElementById('addMemberForm').reportValidity();
+        }, 100);
+    }
+});
+</script>
+
+<style>
+.remove-row-btn { background: #ffebee; color: #e53935; border: 1px solid #ffcdd2; padding: 0 15px; border-radius: 8px; cursor: pointer; font-weight: 700; }
+.add-more-btn { background: #edf5ea; color: #4f7942; border: 1px dashed #4f7942; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.3s; margin-bottom: 15px; }
+.add-more-btn:hover { background: #4f7942; color: white; }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+.modal-content { background: white; padding: 40px; border-radius: 30px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+.modal-btns { display: flex; gap: 15px; margin-top: 30px; }
+
+.member-selection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; padding-bottom: 20px; }
+.selection-card { background: #fdfdfd; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; }
+.selection-card:hover { border-color: #4f7942; background: #f8faf8; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.card-avatar { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 10px; overflow: hidden; background: #f1f1f1; }
+.card-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #4f7942; color: white; font-weight: bold; font-size: 1.5rem; }
+.card-info h3 { margin: 0; font-size: 0.95rem; color: #1a4d2e; }
+.card-info p { margin: 5px 0 0; font-size: 0.75rem; color: #7b6a58; }
+
+.cta-primary { background: #1a4d2e; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; padding: 10px 20px; text-decoration: none; display: inline-block; }
+.cta-primary:hover { background: #143d24; transform: translateY(-2px); }
+.cta-secondary { background: white; color: #1a4d2e; border: 1.5px solid #1a4d2e; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; padding: 10px 20px; text-decoration: none; display: inline-block; }
+.cta-secondary:hover { background: #f1f8e9; }
+</style>
+{% endblock %}
+
+{% block extra_body %}
+<!-- POST-SAVE MODALS -->
+<div id="familyQuestionModal" class="modal-overlay" style="display: {% if success %}flex{% else %}none{% endif %};">
+    <div class="modal-content">
+        <h2>Profile Saved! 🎉</h2>
+        <p>Has anyone in your family already filled out this form?</p>
+        <div class="modal-btns" style="flex-direction: column; gap: 15px;">
+            <button type="button" class="cta-primary" onclick="showVerificationFlow()">Yes, this information is already filled above</button>
+            <button type="button" class="cta-secondary" onclick="submitNoFamily()">No, this information is not filled above</button>
+            <button type="button" class="cta-secondary" style="background: #f8fafc; border-color: #e2e8f0; color: #64748b; margin-top: 5px; font-size: 0.8rem;" onclick="window.location.href='/members/'">← Back to Records (Skip for now)</button>
+        </div>
+    </div>
+</div>
+
+<div id="familyLinkModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="max-width: 800px; text-align: left; height: 85vh; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0;">
+            <h2 style="margin: 0;">Find Family Member</h2>
+            <button type="button" class="modal-btn btn-no" onclick="backToQuestion()" style="padding: 5px 12px; font-size: 0.8rem;">← Back</button>
+        </div>
+        
+        <div id="search_step" style="flex-shrink: 0;">
+            <p style="color: #7b6a58; margin-bottom: 15px;">Enter their Aadhaar Card Number to find them in our database.</p>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="search_aadhar" placeholder="Aadhaar Number (Mandatory)" style="flex-grow: 1; padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
+                <input type="text" id="search_mobile" placeholder="Mobile (Optional)" style="width: 150px; padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
+                <button type="button" class="cta-primary" onclick="performAadharSearch()">Search</button>
+            </div>
+        </div>
+
+        <div id="results_step" style="display: none; flex-grow: 1; overflow-y: auto; margin-top: 25px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="font-weight: 700; color: #1a4d2e; margin-bottom: 15px;">Search Results:</p>
+            <div id="search_results_container" class="member-selection-grid">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+
+        <div id="selection_step" style="display: none; margin-top: 10px; flex-shrink: 0; padding-top: 20px; border-top: 2px solid #e8f5e9;">
+            <input type="hidden" id="found_member_id_field">
+            <div id="member_preview" style="background: #f8fcf8; padding: 20px; border-radius: 15px; border: 1px solid #e0f0e0; margin-bottom: 20px;"></div>
+            
+            <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #4f7942;">What are they to you?</label>
+                    <select id="what_they_are_select" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                        <option value="Father">They are my Father</option>
+                        <option value="Mother">They are my Mother</option>
+                        <option value="Spouse">They are my Spouse</option>
+                        <option value="Son">They are my Son</option>
+                        <option value="Daughter">They are my Daughter</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #4f7942;">What are you to them?</label>
+                    <select id="what_i_am_select_field" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                        <option value="Son">I am their Son</option>
+                        <option value="Daughter">I am their Daughter</option>
+                        <option value="Father">I am their Father</option>
+                        <option value="Mother">I am their Mother</option>
+                        <option value="Wife">I am their Wife</option>
+                        <option value="Husband">I am their Husband</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-btns" style="margin-top: 25px; display: flex; gap: 15px;">
+                <button type="button" id="final_link_btn" class="cta-primary" onclick="finalizeWithLink(this)" style="padding: 12px 25px;">Link & Generate Tree</button>
+                <button type="button" class="cta-secondary" onclick="backToResults()" style="padding: 12px 25px;">← Change Selection</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showVerificationFlow() {
+    document.getElementById('familyQuestionModal').style.display = 'none';
+    document.getElementById('familyLinkModal').style.display = 'flex';
+}
+function backToQuestion() {
+    document.getElementById('familyLinkModal').style.display = 'none';
+    document.getElementById('familyQuestionModal').style.display = 'flex';
+}
+function backToResults() {
+    document.getElementById('selection_step').style.display = 'none';
+    document.getElementById('results_step').style.display = 'block';
+    document.getElementById('search_step').style.display = 'block';
+}
+
+async function performAadharSearch() {
+    const aadhar = document.getElementById('search_aadhar').value;
+    const mobile = document.getElementById('search_mobile').value;
+    if(!aadhar) { alert("Please enter Aadhaar number"); return; }
+    
+    const container = document.getElementById('search_results_container');
+    container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">Searching database... 🔍</div>';
+    document.getElementById('results_step').style.display = 'block';
+
+    try {
+        const res = await fetch(`/search-by-aadhar/?aadhar=${aadhar}&mobile=${mobile}`);
+        const data = await res.json();
+        
+        if(data.status === 'success') {
+            let html = `
+                <div class="selection-card" onclick="selectForLinking('${data.id}', '${data.name}', '${data.village}', '${data.photo}', '${data.father}', '${data.mother}')">
+                    <div class="card-avatar">
+                        ${data.photo ? `<img src="${data.photo}">` : `<div class="avatar-placeholder">${data.name.charAt(0)}</div>`}
+                    </div>
+                    <div class="card-info">
+                        <h3>${data.name}</h3>
+                        <p>📍 ${data.village}</p>
+                        <span style="font-size: 0.7rem; color: #4f7942; font-weight: 700;">Matched Person</span>
+                    </div>
+                </div>`;
+            
+            if(data.relatives && data.relatives.length > 0) {
+                data.relatives.forEach(r => {
+                    html += `
+                        <div class="selection-card" onclick="selectForLinking('${r.id}', '${r.name}', '${data.village}', '${r.photo}', '-', '-')">
+                            <div class="card-avatar">
+                                ${r.photo ? `<img src="${r.photo}">` : `<div class="avatar-placeholder">${r.name.charAt(0)}</div>`}
+                            </div>
+                            <div class="card-info">
+                                <h3>${r.name}</h3>
+                                <p>${r.rel} of matched person</p>
+                            </div>
+                        </div>`;
+                });
+            }
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #e53935;">${data.message}</div>`;
+        }
+    } catch(e) {
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #e53935;">Error searching database.</div>`;
+    }
+}
+
+function selectForLinking(id, name, village, photoUrl, fatherName, motherName) {
+    let avatar = (photoUrl && photoUrl !== 'null' && photoUrl !== 'undefined') 
+        ? `<img src="${photoUrl}" style="width: 60px; height: 60px; border-radius: 15px; object-fit: cover; border: 2px solid #fff;">`
+        : `<div style="width: 60px; height: 60px; background: #4f7942; color: white; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.5rem;">${name.charAt(0)}</div>`;
+
+    document.getElementById('member_preview').innerHTML = `
+        <div style="display: flex; gap: 15px; align-items: center;">
+            ${avatar}
+            <div>
+                <h4 style="margin: 0; color: #1a4d2e; font-size: 1.1rem;">Connecting to: ${name}</h4>
+                <p style="margin: 2px 0; color: #4f7942; font-weight: 600; font-size: 0.8rem;">📍 Village: ${village}</p>
+            </div>
+        </div>`;
+    
+    document.getElementById('found_member_id_field').value = id;
+    document.getElementById('search_step').style.display = 'none';
+    document.getElementById('results_step').style.display = 'none';
+    document.getElementById('selection_step').style.display = 'block';
+}
+
+async function finalizeWithLink(btn) {
+    const existing_id = document.getElementById('found_member_id_field').value;
+    const rel_they_are = document.getElementById('what_they_are_select').value;
+    const rel_i_am = document.getElementById('what_i_am_select_field').value;
+    
+    if(!existing_id) { alert("Error: No member selected."); return; }
+
+    const originalText = btn.innerText;
+    btn.disabled = true;
+    btn.innerText = "Linking... ⏳";
+
+    const fd = new FormData();
+    fd.append('has_family', 'Yes');
+    fd.append('existing_member_id', existing_id);
+    fd.append('what_they_are', rel_they_are);
+    fd.append('what_i_am', rel_i_am);
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    
+    try {
+        const res = await fetch('{% url "connect_family" %}', { method: 'POST', body: fd });
+        const data = await res.json();
+        if(data.status === 'success') {
+            window.location.href = data.redirect;
+        } else {
+            alert("Error: " + (data.message || "Failed to connect."));
+            btn.disabled = false;
+            btn.innerText = originalText;
+        }
+    } catch(e) {
+        console.error(e);
+        alert("Server Error. Please try again.");
+        btn.disabled = false;
+        btn.innerText = originalText;
+    }
+}
+
+async function submitNoFamily() {
+    const fd = new FormData();
+    fd.append('has_family', 'No');
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    try {
+        const res = await fetch('{% url "connect_family" %}', { method: 'POST', body: fd });
+        const data = await res.json();
+        if(data.status === 'success') window.location.href = data.redirect;
+    } catch(e) { alert("Failed to create family ID."); }
+}
 </script>
 {% endblock %}

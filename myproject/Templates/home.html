@@ -3,101 +3,196 @@
 
 {% block content %}
 
-<!-- ================= DASHBOARD (Always Visible) ================= -->
-<section class="form-section">
+{% if not is_dashboard %}
+<!-- ================= PROFESSIONAL LANDING PAGE (Non-Authenticated) ================= -->
+<section class="hero-marketing">
     <div class="container">
-        <div class="section-heading" style="text-align: left; display: flex; justify-content: space-between; align-items: flex-end;">
-            <div>
-                <h1 style="font-size: 42px; margin-bottom: 5px;">Family Heritage Dashboard 👋</h1>
-                <p>Welcome to your digital lineage management platform.</p>
+        <div class="hero-wrapper">
+            <div class="hero-text">
+                <span class="feature-tag">Smart Family Preservation</span>
+                <h1 class="gradient-text">Your Family History, <br>Preserved Forever.</h1>
+                <p>Build a secure, digital legacy of your ancestors. Document every relationship, preserve cherished memories, and visualize your lineage in a beautiful, modern way.</p>
+                <div class="hero-btns">
+                    <a href="{% url 'register' %}" class="cta-primary" style="padding: 18px 45px; font-size: 16px;">Start Your Tree Free</a>
+                    <a href="{% url 'login' %}" class="cta-secondary" style="padding: 18px 45px; font-size: 16px;">Sign In</a>
+                </div>
             </div>
-            <div style="display: flex; gap: 15px;">
-                <a href="{% url 'personal_info' %}" class="cta-primary" style="padding: 12px 25px; font-size: 14px;">+ Add New Member</a>
+            <div class="hero-visual">
+                <div class="main-circle hero-main-circle">
+                    <div style="text-align: center;">
+                        <div style="font-size: 80px;">🌳</div>
+                        <h2 style="color: #1a4d2e; font-weight: 800;">Legacy</h2>
+                    </div>
+                </div>
+                <div class="floating-cards">
+                    <div class="f-card c1 glass-card"><span>🧬</span> <p>Genetics</p></div>
+                    <div class="f-card c2 glass-card"><span>📜</span> <p>History</p></div>
+                    <div class="f-card c3 glass-card"><span>🏠</span> <p>Heritage</p></div>
+                    <div class="f-card c4 glass-card"><span>❤️</span> <p>Family</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="container">
+        <div class="section-title">
+            <h2 class="gradient-text">Everything you need to trace your roots</h2>
+            <p>Our platform combines deep genealogical research with modern design.</p>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card glass-card">
+                <div class="f-icon">🗺️</div>
+                <h3>Dynamic Mapping</h3>
+                <p>Automatically visualize complex relationships across multiple generations with our smart graph engine.</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="f-icon">🔐</div>
+                <h3>Private & Secure</h3>
+                <p>Your family data is yours. We use bank-grade encryption to ensure your legacy remains private.</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="f-icon">📱</div>
+                <h3>Multi-Device</h3>
+                <p>Access your family tree from anywhere—mobile, tablet, or desktop—with a seamless responsive experience.</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="f-icon">🤝</div>
+                <h3>Collaboration</h3>
+                <p>Invite family members to contribute stories, photos, and missing links to your shared history.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="legacy-section" style="background: #f8fafc;">
+    <div class="container">
+        <div class="legacy-content">
+            <div class="legacy-img glass-card" style="padding: 0; overflow: hidden; height: 400px; display: flex; align-items: center; justify-content: center; background: #1a4d2e;">
+                <h1 style="color: white; font-size: 120px; opacity: 0.2;">ROOTS</h1>
+            </div>
+            <div class="legacy-info">
+                <h2 class="gradient-text">Preserve stories that matter.</h2>
+                <ul class="legacy-list">
+                    <li>
+                        <strong>Document Oral History</strong>
+                        Record stories passed down through generations before they are lost to time.
+                    </li>
+                    <li>
+                        <strong>Preserve Family Rituals</strong>
+                        Save details about family traditions, food, and cultural heritage (Kuldevi & Nived).
+                    </li>
+                    <li>
+                        <strong>Visual Timeline</strong>
+                        See how your family has evolved over the decades with an interactive timeline.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+<!-- ================= PROFESSIONAL DASHBOARD (Authenticated) ================= -->
+<section class="form-section" style="padding-top: 50px;">
+    <div class="container">
+        <div class="section-heading dashboard-heading">
+            <div>
+                <h1 class="gradient-text" style="font-size: 36px; margin-bottom: 5px;">Family Dashboard</h1>
+                <p style="color: #64748b;">Welcome back, <strong>{{ request.user.username }}</strong>. Your legacy is growing.</p>
+            </div>
+            <div class="dashboard-actions">
+                <a href="{% url 'personal_info' %}" class="cta-primary" style="padding: 12px 25px; font-size: 14px; box-shadow: 0 4px 15px rgba(26, 77, 46, 0.2);">+ Add Relative</a>
             </div>
         </div>
 
-        <!-- STATS GRID -->
-        <div class="stats-grid" style="margin-top: 40px;">
-            <div class="stat-card">
-                <div class="stat-icon">📊</div>
+        <!-- ENHANCED STATS -->
+        <div class="stats-grid" style="margin-top: 40px; gap: 25px;">
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: #e3f2fd; color: #1976d2;">📊</div>
                 <div class="stat-info">
                     <h3>{{ total_members }}</h3>
-                    <p>Total Members</p>
+                    <p>Relativies Tracked</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">👨</div>
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: #fff3e0; color: #f57c00;">👨</div>
                 <div class="stat-info">
                     <h3>{{ males }}</h3>
-                    <p>Males</p>
+                    <p>Male Descendants</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">👩</div>
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: #fce4ec; color: #c2185b;">👩</div>
                 <div class="stat-info">
                     <h3>{{ females }}</h3>
-                    <p>Females</p>
+                    <p>Female Descendants</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">🌍</div>
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: #f3e5f5; color: #7b1fa2;">🌍</div>
                 <div class="stat-info">
                     <h3>{{ locations }}</h3>
-                    <p>Locations</p>
+                    <p>Global Branches</p>
                 </div>
             </div>
         </div>
 
-        <div class="form-grid" style="margin-top: 40px;">
-            <!-- RECENT ACTIVITY -->
-            <div class="form-card" style="grid-column: 1 / span 1;">
-                <div class="form-title" style="display: flex; justify-content: space-between; align-items: center;">
-                    <span>🕒 Recent Members</span>
-                    <a href="{% url 'members_list' %}" style="font-size: 14px; color: #4f7942; text-decoration: none;">View All →</a>
+        <div class="form-grid" style="margin-top: 40px; gap: 30px;">
+            <!-- RECENT ACTIVITY (Clean Style) -->
+            <div class="form-card glass-card" style="grid-column: 1 / span 1; padding: 35px; border-radius: 28px;">
+                <div class="form-title" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 20px;">
+                    <span style="color: #1a4d2e;">🕒 Recent Updates</span>
+                    <a href="{% url 'members_list' %}" style="font-size: 13px; color: #4f7942; text-decoration: none; font-weight: 600;">Full Records →</a>
                 </div>
-                <div style="margin-top: 20px;">
+                <div style="margin-top: 15px;">
                     {% for member in recent_members %}
-                        <div style="display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid #f0f2f5;">
+                        <div style="display: flex; align-items: center; gap: 18px; padding: 18px 0; border-bottom: 1px solid #f8fafc;">
                             {% if member.photo %}
-                                <img src="{{ member.photo.url }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                <img src="{{ member.photo.url }}" style="width: 48px; height: 48px; border-radius: 14px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                             {% else %}
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #edf5ea; display: flex; align-items: center; justify-content: center;">👤</div>
+                                <div style="width: 48px; height: 48px; border-radius: 14px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 20px;">👤</div>
                             {% endif %}
-                            <div>
-                                <strong style="display: block; font-size: 14px;">{{ member.first_name }} {{ member.last_name }}</strong>
-                                <span style="font-size: 12px; color: #7b6a58;">{{ member.relationship_title }}</span>
+                            <div style="flex: 1;">
+                                <strong style="display: block; font-size: 15px; color: #1e293b;">{{ member.first_name }} {{ member.last_name }}</strong>
+                                <span style="font-size: 13px; color: #94a3b8;">{{ member.relationship_title|default:"Relative" }}</span>
                             </div>
+                            <a href="{% url 'member_detail' member.pk %}" class="view-btn" style="width: 32px; height: 32px; font-size: 12px;">👁️</a>
                         </div>
                     {% empty %}
-                        <p style="color: #999; font-size: 14px; text-align: center; padding: 20px;">No members added yet.</p>
+                        <div style="text-align: center; padding: 40px 0;">
+                            <p style="color: #94a3b8; font-size: 15px;">No members added yet.</p>
+                        </div>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- QUICK ACTIONS -->
-            <div class="form-card" style="grid-column: 2 / span 1;">
-                <div class="form-title">⚡ Quick Actions</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
-                    <a href="{% url 'family_tree' %}" class="feature-card" style="padding: 20px; border-radius: 15px;">
-                        <div style="font-size: 30px;">🌳</div>
-                        <h4 style="margin-top: 10px; font-size: 14px;">View Tree</h4>
+            <!-- QUICK ACTIONS (Iconic Style) -->
+            <div class="form-card glass-card" style="grid-column: 2 / span 1; padding: 35px; border-radius: 28px;">
+                <div class="form-title" style="color: #1a4d2e; border-bottom: 1px solid #f1f5f9; padding-bottom: 20px;">⚡ Quick Management</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
+                    <a href="{% url 'family_tree' %}" class="feature-card glass-card" style="padding: 25px; border-radius: 20px; background: #f1f8e9; border: none;">
+                        <div style="font-size: 36px; margin-bottom: 15px;">🌳</div>
+                        <h4 style="font-size: 15px; color: #1a4d2e;">Visualize Tree</h4>
                     </a>
-                    <a href="{% url 'export_members' %}" class="feature-card" style="padding: 20px; border-radius: 15px;">
-                        <div style="font-size: 30px;">📥</div>
-                        <h4 style="margin-top: 10px; font-size: 14px;">Backup Data</h4>
+                    <a href="{% url 'export_members' %}" class="feature-card glass-card" style="padding: 25px; border-radius: 20px; background: #e3f2fd; border: none;">
+                        <div style="font-size: 36px; margin-bottom: 15px;">📥</div>
+                        <h4 style="font-size: 15px; color: #1976d2;">Backup CSV</h4>
                     </a>
-                    <a href="{% url 'help' %}" class="feature-card" style="padding: 20px; border-radius: 15px;">
-                        <div style="font-size: 30px;">❓</div>
-                        <h4 style="margin-top: 10px; font-size: 14px;">Help Center</h4>
+                    <a href="{% url 'help' %}" class="feature-card glass-card" style="padding: 25px; border-radius: 20px; background: #fff3e0; border: none;">
+                        <div style="font-size: 36px; margin-bottom: 15px;">❓</div>
+                        <h4 style="font-size: 15px; color: #f57c00;">Help Center</h4>
                     </a>
-                    <a href="{% url 'contact' %}" class="feature-card" style="padding: 20px; border-radius: 15px;">
-                        <div style="font-size: 30px;">✉️</div>
-                        <h4 style="margin-top: 10px; font-size: 14px;">Support</h4>
+                    <a href="{% url 'contact' %}" class="feature-card glass-card" style="padding: 25px; border-radius: 20px; background: #f3e5f5; border: none;">
+                        <div style="font-size: 36px; margin-bottom: 15px;">✉️</div>
+                        <h4 style="font-size: 15px; color: #7b1fa2;">Support</h4>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 </section>
+{% endif %}
 
 {% endblock %}

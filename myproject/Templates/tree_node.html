@@ -1,16 +1,19 @@
 <li>
     <div class="member-card">
-        <a href="{% url 'member_detail' m.pk %}" style="text-decoration: none; color: inherit;">
+        <a href="{% url 'member_detail' m.pk %}" style="text-decoration: none; color: inherit;" onclick="event.stopPropagation()">
             <div class="m-avatar">
                 {% if m.photo %}
                     <img src="{{ m.photo.url }}">
                 {% else %}
-                    <span>{{ m.first_name|first }}{{ m.last_name|first }}</span>
+                    <div class="avatar-placeholder">{{ m.first_name|first }}{{ m.last_name|first }}</div>
                 {% endif %}
             </div>
             <div class="m-info">
                 <p class="m-name">{{ m.first_name }} {{ m.last_name }}</p>
-                <p class="m-relation">{{ m.relationship_title|default:"Member" }}</p>
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <span class="m-relation">{{ m.relationship_title|default:"Member" }}</span>
+                    <span class="m-id">ID: MEM-{{ m.id }}</span>
+                </div>
             </div>
         </a>
     </div>
